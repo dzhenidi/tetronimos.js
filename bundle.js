@@ -59,7 +59,7 @@
 	document.addEventListener("DOMContentLoaded", function () {
 	  var canvasEl = document.getElementsByTagName("canvas")[0];
 	  canvasEl.width = _game2.default.DIM_X;
-	  canvasEl.width = _game2.default.DIM_Y;
+	  canvasEl.height = _game2.default.DIM_Y;
 	
 	  var ctx = canvasEl.getContext("2d");
 	  var game = new _game2.default();
@@ -97,9 +97,9 @@
 	  }, {
 	    key: 'draw',
 	    value: function draw(ctx) {
-	      ctx.clearRect(0, 0, Game.DIM_Y, Game.DIM_X);
+	      ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
 	      ctx.fillStyle = Game.BG_COLOR;
-	      ctx.fillRect(0, 0, Game.DIM_Y, Game.DIM_X);
+	      ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
 	      this.tiles.forEach(function (tile) {
 	        return tile.draw(ctx);
 	      });

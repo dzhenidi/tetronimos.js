@@ -16,9 +16,9 @@ class Game {
   }
 
   draw(ctx) {
-    ctx.clearRect(0, 0, Game.DIM_Y, Game.DIM_X);
+    ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
     ctx.fillStyle = Game.BG_COLOR;
-    ctx.fillRect(0, 0, Game.DIM_Y, Game.DIM_X);
+    ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
     this.tiles.forEach( tile => tile.draw(ctx));
   }
 }

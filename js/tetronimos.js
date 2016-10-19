@@ -4,7 +4,7 @@ import GameView from "./game_view";
 document.addEventListener("DOMContentLoaded", function(){
   const canvasEl = document.getElementsByTagName("canvas")[0];
   canvasEl.width = Game.DIM_X;
-  canvasEl.width = Game.DIM_Y;
+  canvasEl.height = Game.DIM_Y;
 
   const ctx = canvasEl.getContext("2d");
   const game = new Game();
