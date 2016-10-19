@@ -1,0 +1,32 @@
+{
+  "name": "tetronimos.js",
+  "version": "1.0.0",
+  "description": "## Background   Tetris is a tile-matching video game born in Soviet Russia in 1984. In the tradition of geometric puzzles, the tetris tile is a four-celled, one-sided polyomino (a geometric figure composed at squares connected at the edges), called *tetrimino* in the tetris world and *tetromino* in the CS world of tiling.",
+  "main": "webpack.config.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dzhenidi/tetronimos.js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dzhenidi/tetronimos.js/issues"
+  },
+  "homepage": "https://github.com/dzhenidi/tetronimos.js#readme",
+  "dependencies": {
+  "babel-core": "^6.13.2",
+  "babel-loader": "^6.2.5",
+  "babel-preset-es2015": "^6.13.2",
+  "webpack": "^1.13.1"
+  },
+  "engines": {
+    "node": "6.3.1",
+    "npm": "3.10.3"
+  }
+}
