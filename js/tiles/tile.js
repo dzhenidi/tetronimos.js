@@ -5,12 +5,21 @@ import {
 } from './constants';
 
 class Tile {
-  constructor(board, location, velocity) {
+  constructor(board, shape, topLeft) {
     this.board = board.getBoard();
-    this.location = location || [];
-    this.velocity = velocity || STARTING_VELOCITY;
+    // this.location = location || [];
+    // this.velocity = velocity || STARTING_VELOCITY;
+    this.shape = shape;
+    this.topLeft = topLeft;
   }
 
+//instead of this.location:
+// this.shape = [[1, 1],
+              // [1, 1]]
+
+              // = [[2, 2, 2, 2],
+              //   [0, 0, 0, 0]]
+// this.topLeft = { row: 0, col: 4 }
   move(direction) {
     switch (direction) {
       case MOVES.RIGHT:
@@ -45,5 +54,7 @@ class Tile {
     })
   }
 }
+
+
 
 export default Tile;
