@@ -9,9 +9,9 @@ import {
 
 class Game {
   constructor() {
-    this.fallingTile = [];
+    this.fallingTile = null;
     this.tiles = [];
-    this.landedBlocks = [];
+    this.landedTiles = [];
     this.board = new Board();
   }
 
@@ -20,11 +20,19 @@ class Game {
     this.tiles.push(this.fallingTile);
   }
 
-  step(delta, ctx) {
-    if (this.tiles.length === 0) {
+  landedTiles() {
+    this.landedTiles = this.board.grid;
+  }
+
+  step() {
+    if (!this.fallingTile) {
       this.addTile();
     } else {
       this.fallingTile.move('down', STARTING_VELOCITY);
+      if (this.fallingTile.landed) {
+        this.landedTiles.push(this.fallingTile);
+        this.fallingTile = null;
+      }
     }
   }
 
@@ -41,22 +49,25 @@ class Game {
     ctx.fillStyle = Game.BG_COLOR;
     ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
 
-    // this.landedBlocks.forEach( block => block.draw(ctx)); OR
-    // this.board.draw(ctx) ???
-    this.fallingTile.draw(ctx);
+    this.landedTiles.forEach( tile => tile.draw(ctx));
+
+    if (this.fallingTile) {
+      this.fallingTile.draw(ctx);
+    }
+
   }
 
-  drawLanded(ctx) {
-    for (let row = 0; row < this.landedBlocks.length; row++) {
-      for (let col = 0; col < this.landedBlocks[row].length; col++) {
-        if (this.landedBlocks[row][col] != 0) {
-          //match landedBlocks[row][col]'s value to a shape with its color'
-          ctx.fillStyle = 'red';
-          ctx.fillRect(col * 30, row * 30, SQUARE_SIDE, SQUARE_SIDE);
-        }
-      }
-    }
-  }
+  // drawLanded(ctx) {
+  //   for (let row = 0; row < this.landedBlocks.length; row++) {
+  //     for (let col = 0; col < this.landedBlocks[row].length; col++) {
+  //       if (this.landedBlocks[row][col] !== 0) {
+  //         //match landedBlocks[row][col]'s value to a shape with its color'
+  //         ctx.fillStyle = 'red';
+  //         ctx.fillRect(col * 30, row * 30, SQUARE_SIDE, SQUARE_SIDE);
+  //       }
+  //     }
+  //   }
+  // }
 
   randomTile(){
     let shape = [

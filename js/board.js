@@ -1,3 +1,9 @@
+import {
+  SQUARE_SIDE,
+  STARTING_VELOCITY,
+  COLORS
+} from './tiles/constants';
+
 class Board {
   constructor(){
     this.grid = Board.EMPTY_GRID;
@@ -12,12 +18,30 @@ class Board {
     for (let row = 0; row < tile.shape.length; row++) {
       for (let col = 0; col < tile.shape[row].length; col++) {
         let gridCol = tile.topLeft.col + col;
-        let gridRow = tile.topLeft.row + row;
-        debugger
+        let gridRow = Math.floor(tile.topLeft.row) + row;
         this.grid[gridRow][gridCol] = tile.shape[row][col];
       }
     }
   }
+
+  willCollide(row, col) {
+    if (row >= 19 || this.grid[row][col] !== 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // draw(ctx) {
+  //   for (let row = 0; row < this.grid.length; row++) {
+  //     for (let col = 0; col < this.grid[row].length; col++) {
+  //       ctx.clearRect(col * 30, row * 30, SQUARE_SIDE, SQUARE_SIDE);
+  //       ctx.fillStyle = COLORS[this.grid[row][col]];
+  //       ctx.fillRect(col, row, SQUARE_SIDE, SQUARE_SIDE);
+  //
+  //     }
+  //   }
+  // }
 }
 
 Board.EMPTY_GRID =  [

@@ -1,6 +1,6 @@
 export const SQUARE_SIDE = 30;
 
-export const STARTING_VELOCITY = 0.02;
+export const STARTING_VELOCITY = 5;
 
 export const MOVES = {
   LEFT : "left",
@@ -9,11 +9,12 @@ export const MOVES = {
 };
 
 export const COLORS = {
-  'line': 'cyan',
-  'O': 'yellow',
-  'T': 'purple',
-  'S': 'green',
-  'Z': 'red',
-  'J': 'blue',
-  'L': 'orange'
+  0: 'white', //empty
+  2: 'cyan', //line
+  1: 'yellow', //O
+  3: 'purple', //T
+  4: 'green', //S
+  5: 'red', //Z
+  6: 'blue', //J
+  7: 'orange' //L
 };
