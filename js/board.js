@@ -25,11 +25,16 @@ class Board {
   }
 
   willCollide(row, col) {
-    if (row >= 19 || this.grid[row][col] !== 0) {
+    if (row > 19 || this.grid[row][col] !== 0) {
       return true;
     } else {
       return false;
     }
+  }
+
+  full() {
+
+    return this.grid[0][4] !== 0 || this.grid[0][5];
   }
 
   // draw(ctx) {

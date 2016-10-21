@@ -41,7 +41,6 @@ class Tile {
               let boardRow = row + this.potentialTopLeft.row;
               let boardCol = col + this.potentialTopLeft.col;
               if (this.board.willCollide(boardRow, boardCol)) {
-                //add to landedBlocks
                 this.board.add(this);
                 this.landed = true;
                 return;

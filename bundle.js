@@ -119,18 +119,27 @@
 	      if (!this.fallingTile) {
 	        this.addTile();
 	      } else {
-	        this.fallingTile.move('down', _constants.STARTING_VELOCITY);
-	        if (this.fallingTile.landed) {
-	          this.landedTiles.push(this.fallingTile);
-	          this.fallingTile = null;
+	        if (this.gameOver()) {
+	          cancelAnimationFrame();
+	        } else {
+	          this.moveTile();
 	        }
 	      }
 	    }
-	
-	    // moveTile(delta) {
-	    //   this.fallingTile.topLeft.row += STARTING_VELOCITY;
-	    // }
-	
+	  }, {
+	    key: "moveTile",
+	    value: function moveTile() {
+	      this.fallingTile.move('down', _constants.STARTING_VELOCITY);
+	      if (this.fallingTile.landed) {
+	        this.landedTiles.push(this.fallingTile);
+	        this.fallingTile = null;
+	      }
+	    }
+	  }, {
+	    key: "gameOver",
+	    value: function gameOver() {
+	      return this.board.full();
+	    }
 	  }, {
 	    key: "removeLine",
 	    value: function removeLine() {}
@@ -235,7 +244,6 @@
 	                var boardRow = row + this.potentialTopLeft.row;
 	                var boardCol = col + this.potentialTopLeft.col;
 	                if (this.board.willCollide(boardRow, boardCol)) {
-	                  //add to landedBlocks
 	                  this.board.add(this);
 	                  this.landed = true;
 	                  return;
@@ -361,11 +369,17 @@
 	  }, {
 	    key: 'willCollide',
 	    value: function willCollide(row, col) {
-	      if (row >= 19 || this.grid[row][col] !== 0) {
+	      if (row > 19 || this.grid[row][col] !== 0) {
 	        return true;
 	      } else {
 	        return false;
 	      }
+	    }
+	  }, {
+	    key: 'full',
+	    value: function full() {
+	
+	      return this.grid[0][4] !== 0 || this.grid[0][5];
 	    }
 	
 	    // draw(ctx) {
@@ -447,7 +461,15 @@
 	    }
 	  }, {
 	    key: "bindKeyHandlers",
-	    value: function bindKeyHandlers() {}
+	    value: function bindKeyHandlers() {
+	      var tile = this.game.fallingTile;
+	      Object.keys(GameView.MOVES).forEach(function (k) {
+	        var direction = GameView.MOVES[k];
+	        key(k, function () {
+	          tile.move(direction);
+	        });
+	      });
+	    }
 	
 	    // pass argument time to animate to timestamp animations
 	
@@ -466,6 +488,12 @@
 	
 	  return GameView;
 	}();
+	
+	GameView.MOVES = {
+	  "a": "left",
+	  "s": "down",
+	  "d": "right"
+	};
 	
 	exports.default = GameView;
 

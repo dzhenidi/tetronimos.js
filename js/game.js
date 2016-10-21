@@ -28,17 +28,26 @@ class Game {
     if (!this.fallingTile) {
       this.addTile();
     } else {
-      this.fallingTile.move('down', STARTING_VELOCITY);
-      if (this.fallingTile.landed) {
-        this.landedTiles.push(this.fallingTile);
-        this.fallingTile = null;
+      if (this.gameOver()) {
+        cancelAnimationFrame();
+      } else {
+        this.moveTile();
       }
+
     }
   }
 
-  // moveTile(delta) {
-  //   this.fallingTile.topLeft.row += STARTING_VELOCITY;
-  // }
+  moveTile() {
+    this.fallingTile.move('down', STARTING_VELOCITY);
+    if (this.fallingTile.landed) {
+      this.landedTiles.push(this.fallingTile);
+      this.fallingTile = null;
+    }
+  }
+
+  gameOver() {
+    return this.board.full();
+  }
 
   removeLine(){
 

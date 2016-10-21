@@ -17,7 +17,11 @@ class GameView {
   }
 
   bindKeyHandlers() {
-
+    const tile = this.game.fallingTile;
+    Object.keys(GameView.MOVES).forEach( k => {
+      let direction = GameView.MOVES[k];
+      key(k, () => {tile.move(direction)});
+    });
   }
 
   // pass argument time to animate to timestamp animations
@@ -33,6 +37,12 @@ class GameView {
 
 
 
+}
+
+GameView.MOVES = {
+  "a": "left",
+  "s": "down",
+  "d": "right"
 }
 
 export default GameView;
