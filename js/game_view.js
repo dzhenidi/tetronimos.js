@@ -6,7 +6,7 @@ class GameView {
   constructor(game, ctx){
     this.ctx = ctx;
     this.game = game;
-
+    this.game.addTile();
   }
 
   start(){
@@ -17,7 +17,7 @@ class GameView {
   }
 
   bindKeyHandlers() {
-    const tile = this.game.fallingTile;
+    let tile = this.game.tiles[this.game.tiles.length - 1];
     Object.keys(GameView.MOVES).forEach( k => {
       let direction = GameView.MOVES[k];
       key(k, () => {tile.move(direction)});
@@ -27,6 +27,7 @@ class GameView {
   // pass argument time to animate to timestamp animations
   animate(time) {
     const timeDelta = time - this.lastTime;
+    
     this.game.step(timeDelta, this.ctx);
     this.game.draw(this.ctx);
     this.lastTime = time;

@@ -9,27 +9,27 @@ import {
 
 class Game {
   constructor() {
-    this.fallingTile = null;
     this.tiles = [];
     this.landedTiles = [];
     this.board = new Board();
   }
 
   addTile() {
-    this.fallingTile = this.randomTile();
-    this.tiles.push(this.fallingTile);
+    let newTile = this.randomTile();
+    this.tiles.push(newTile);
+    return newTile;
   }
 
-  landedTiles() {
-    this.landedTiles = this.board.grid;
-  }
+  // landedTiles() {
+  //   this.landedTiles = this.board.grid;
+  // }
 
   step() {
-    if (!this.fallingTile) {
+    if (this.tiles.length === 0 || this.tiles[this.tiles.length - 1].landed) {
       this.addTile();
     } else {
       if (this.gameOver()) {
-        cancelAnimationFrame();
+        // cancelAnimationFrame();
       } else {
         this.moveTile();
       }
@@ -38,10 +38,11 @@ class Game {
   }
 
   moveTile() {
-    this.fallingTile.move('down', STARTING_VELOCITY);
-    if (this.fallingTile.landed) {
-      this.landedTiles.push(this.fallingTile);
-      this.fallingTile = null;
+    let currentTile = this.tiles[this.tiles.length - 1];
+    currentTile.drop(STARTING_VELOCITY);
+    if (currentTile.landed) {
+      this.landedTiles.push(currentTile);
+      this.addTile()
     }
   }
 
@@ -60,8 +61,8 @@ class Game {
 
     this.landedTiles.forEach( tile => tile.draw(ctx));
 
-    if (this.fallingTile) {
-      this.fallingTile.draw(ctx);
+    if (!this.tiles[this.tiles.length - 1].landed) {
+      this.tiles[this.tiles.length - 1].draw(ctx);
     }
 
   }

@@ -82,11 +82,11 @@
 	
 	var _tile2 = _interopRequireDefault(_tile);
 	
-	var _board = __webpack_require__(4);
+	var _board = __webpack_require__(3);
 	
 	var _board2 = _interopRequireDefault(_board);
 	
-	var _constants = __webpack_require__(3);
+	var _constants = __webpack_require__(4);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -96,7 +96,6 @@
 	  function Game() {
 	    _classCallCheck(this, Game);
 	
-	    this.fallingTile = null;
 	    this.tiles = [];
 	    this.landedTiles = [];
 	    this.board = new _board2.default();
@@ -105,22 +104,23 @@
 	  _createClass(Game, [{
 	    key: "addTile",
 	    value: function addTile() {
-	      this.fallingTile = this.randomTile();
-	      this.tiles.push(this.fallingTile);
+	      var newTile = this.randomTile();
+	      this.tiles.push(newTile);
+	      return newTile;
 	    }
-	  }, {
-	    key: "landedTiles",
-	    value: function landedTiles() {
-	      this.landedTiles = this.board.grid;
-	    }
+	
+	    // landedTiles() {
+	    //   this.landedTiles = this.board.grid;
+	    // }
+	
 	  }, {
 	    key: "step",
 	    value: function step() {
-	      if (!this.fallingTile) {
+	      if (this.tiles.length === 0 || this.tiles[this.tiles.length - 1].landed) {
 	        this.addTile();
 	      } else {
 	        if (this.gameOver()) {
-	          cancelAnimationFrame();
+	          // cancelAnimationFrame();
 	        } else {
 	          this.moveTile();
 	        }
@@ -129,10 +129,11 @@
 	  }, {
 	    key: "moveTile",
 	    value: function moveTile() {
-	      this.fallingTile.move('down', _constants.STARTING_VELOCITY);
-	      if (this.fallingTile.landed) {
-	        this.landedTiles.push(this.fallingTile);
-	        this.fallingTile = null;
+	      var currentTile = this.tiles[this.tiles.length - 1];
+	      currentTile.drop(_constants.STARTING_VELOCITY);
+	      if (currentTile.landed) {
+	        this.landedTiles.push(currentTile);
+	        this.addTile();
 	      }
 	    }
 	  }, {
@@ -154,8 +155,8 @@
 	        return tile.draw(ctx);
 	      });
 	
-	      if (this.fallingTile) {
-	        this.fallingTile.draw(ctx);
+	      if (!this.tiles[this.tiles.length - 1].landed) {
+	        this.tiles[this.tiles.length - 1].draw(ctx);
 	      }
 	    }
 	
@@ -202,7 +203,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _constants = __webpack_require__(3);
+	var _constants = __webpack_require__(4);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -213,47 +214,74 @@
 	    this.board = board;
 	    this.shape = shape;
 	    this.topLeft = topLeft;
-	    this.potentialTopLeft = {};
 	    this.landed = false;
 	  }
 	
-	  // potentialTopLeft(){
-	  //   this.potentialTopLeft =  {
-	  //     row: Math.abs(Math.floor(this.topLeft.row / 30)) + 1,
-	  //     col: this.topLeft.col
-	  //   };
-	  //
-	  //   return this.potentialTopLeft;
-	  // }
-	
 	  _createClass(Tile, [{
+	    key: 'potentialTopLeft',
+	    value: function potentialTopLeft() {
+	      return {
+	        row: Math.floor(this.topLeft.row) + 1,
+	        col: Math.floor(this.topLeft.col) + 1 };
+	    }
+	  }, {
 	    key: 'move',
 	    value: function move(direction, velocity) {
 	      switch (direction) {
 	        case _constants.MOVES.RIGHT:
-	
+	          if (this.tileWillCollide()) {
+	            this.land();
+	          } else {
+	            this.topLeft.col += 1;
+	          }
 	          break;
+	
 	        case _constants.MOVES.LEFT:
-	
+	          if (this.tileWillCollide()) {
+	            this.land();
+	          } else {
+	            this.topLeft.col -= 1;
+	          }
 	          break;
+	
 	        case _constants.MOVES.DOWN:
-	          this.potentialTopLeft = Object.assign({}, this.topLeft, { row: Math.floor(this.topLeft.row) + 1 });
-	          for (var row = 0; row < this.shape.length; row++) {
-	            for (var col = 0; col < this.shape[row].length; col++) {
-	              if (this.shape[row][col] !== 0) {
-	                var boardRow = row + this.potentialTopLeft.row;
-	                var boardCol = col + this.potentialTopLeft.col;
-	                if (this.board.willCollide(boardRow, boardCol)) {
-	                  this.board.add(this);
-	                  this.landed = true;
-	                  return;
-	                }
-	              }
+	          if (this.tileWillCollide()) {
+	            this.land();
+	          } else {
+	            this.topLeft.row += 1;
+	          }
+	          break;
+	      }
+	    }
+	  }, {
+	    key: 'land',
+	    value: function land() {
+	      this.board.add(this);
+	      this.landed = true;
+	    }
+	  }, {
+	    key: 'tileWillCollide',
+	    value: function tileWillCollide() {
+	      for (var row = 0; row < this.shape.length; row++) {
+	        for (var col = 0; col < this.shape[row].length; col++) {
+	          if (this.shape[row][col] !== 0) {
+	            var boardRow = row + this.potentialTopLeft().row;
+	            var boardCol = col + this.potentialTopLeft().col;
+	            if (this.board.blockWillCollide(boardRow, boardCol)) {
+	              return true;
 	            }
 	          }
-	          // this.topLeft = this.potentialTopLeft;
-	          this.topLeft.row += velocity / 30;
-	          break;
+	        }
+	      }
+	      return false;
+	    }
+	  }, {
+	    key: 'drop',
+	    value: function drop(velocity) {
+	      if (this.tileWillCollide()) {
+	        this.land();
+	      } else {
+	        this.topLeft.row += velocity / 30;
 	      }
 	    }
 	
@@ -298,36 +326,6 @@
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var SQUARE_SIDE = exports.SQUARE_SIDE = 30;
-	
-	var STARTING_VELOCITY = exports.STARTING_VELOCITY = 5;
-	
-	var MOVES = exports.MOVES = {
-	  LEFT: "left",
-	  RIGHT: "right",
-	  DOWN: "down"
-	};
-	
-	var COLORS = exports.COLORS = {
-	  0: 'white', //empty
-	  2: 'cyan', //line
-	  1: 'yellow', //O
-	  3: 'purple', //T
-	  4: 'green', //S
-	  5: 'red', //Z
-	  6: 'blue', //J
-	  7: 'orange' //L
-	};
-
-/***/ },
-/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -338,7 +336,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _constants = __webpack_require__(3);
+	var _constants = __webpack_require__(4);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -367,8 +365,8 @@
 	      }
 	    }
 	  }, {
-	    key: 'willCollide',
-	    value: function willCollide(row, col) {
+	    key: 'blockWillCollide',
+	    value: function blockWillCollide(row, col) {
 	      if (row > 19 || this.grid[row][col] !== 0) {
 	        return true;
 	      } else {
@@ -424,6 +422,36 @@
 	exports.default = Board;
 
 /***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var SQUARE_SIDE = exports.SQUARE_SIDE = 30;
+	
+	var STARTING_VELOCITY = exports.STARTING_VELOCITY = 5;
+	
+	var MOVES = exports.MOVES = {
+	  LEFT: "left",
+	  RIGHT: "right",
+	  DOWN: "down"
+	};
+	
+	var COLORS = exports.COLORS = {
+	  0: 'white', //empty
+	  2: 'cyan', //line
+	  1: 'yellow', //O
+	  3: 'purple', //T
+	  4: 'green', //S
+	  5: 'red', //Z
+	  6: 'blue', //J
+	  7: 'orange' //L
+	};
+
+/***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -449,6 +477,7 @@
 	
 	    this.ctx = ctx;
 	    this.game = game;
+	    this.game.addTile();
 	  }
 	
 	  _createClass(GameView, [{
@@ -462,7 +491,7 @@
 	  }, {
 	    key: "bindKeyHandlers",
 	    value: function bindKeyHandlers() {
-	      var tile = this.game.fallingTile;
+	      var tile = this.game.tiles[this.game.tiles.length - 1];
 	      Object.keys(GameView.MOVES).forEach(function (k) {
 	        var direction = GameView.MOVES[k];
 	        key(k, function () {
@@ -477,6 +506,7 @@
 	    key: "animate",
 	    value: function animate(time) {
 	      var timeDelta = time - this.lastTime;
+	
 	      this.game.step(timeDelta, this.ctx);
 	      this.game.draw(this.ctx);
 	      this.lastTime = time;

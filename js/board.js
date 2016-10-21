@@ -24,13 +24,15 @@ class Board {
     }
   }
 
-  willCollide(row, col) {
+  blockWillCollide(row, col) {
     if (row > 19 || this.grid[row][col] !== 0) {
       return true;
     } else {
       return false;
     }
   }
+
+
 
   full() {
 
