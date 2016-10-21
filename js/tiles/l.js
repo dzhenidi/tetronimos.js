@@ -2,15 +2,15 @@ import Tile from "./tile";
 import { COLORS } from "./constants";
 
 
-class TileO extends Tile {
+class TileL extends Tile {
   constructor(board) {
     super(board);
-    this.color = COLORS.O;
+    this.color = COLORS.L;
     this.shape = [
-      [1, 1],
-      [1, 1]
+      [7, 7, 7],
+      [7, 0, 0]
     ];
   }
 }
 
-export default TileO;
+export default TileL;

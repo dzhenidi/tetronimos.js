@@ -1,7 +1,7 @@
 import {
   SQUARE_SIDE,
   STARTING_VELOCITY,
-  COLORS
+  COLORS_NUM
 } from './tiles/constants';
 
 class Board {
@@ -39,16 +39,20 @@ class Board {
     return this.grid[0][4] !== 0 || this.grid[0][5];
   }
 
-  // draw(ctx) {
-  //   for (let row = 0; row < this.grid.length; row++) {
-  //     for (let col = 0; col < this.grid[row].length; col++) {
-  //       ctx.clearRect(col * 30, row * 30, SQUARE_SIDE, SQUARE_SIDE);
-  //       ctx.fillStyle = COLORS[this.grid[row][col]];
-  //       ctx.fillRect(col, row, SQUARE_SIDE, SQUARE_SIDE);
-  //
-  //     }
-  //   }
-  // }
+  draw(ctx) {
+    for (let row = 0; row < this.grid.length; row++) {
+      for (let col = 0; col < this.grid[row].length; col++) {
+        ctx.beginPath();
+        ctx.rect(col * 30, row * 30, SQUARE_SIDE, SQUARE_SIDE);
+        ctx.fillStyle = COLORS_NUM[this.grid[row][col]];
+        ctx.fill();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = 'black';
+        ctx.stroke();
+
+      }
+    }
+  }
 }
 
 Board.EMPTY_GRID =  [

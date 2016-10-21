@@ -10,6 +10,17 @@ export const MOVES = {
 
 export const COLORS = {
   0: 'white', //empty
+  'line': 'cyan', //line
+  'O': 'yellow', //O
+  'T': 'purple', //T
+  'S': 'green', //S
+  'Z': 'red', //Z
+  'J': 'blue', //J
+  'L': 'orange' //L
+};
+
+export const COLORS_NUM = {
+  0: 'white', //empty
   2: 'cyan', //line
   1: 'yellow', //O
   3: 'purple', //T

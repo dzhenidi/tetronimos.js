@@ -3,14 +3,12 @@ import { COLORS } from "./constants";
 
 
 class TileJ extends Tile {
-  constructor(board, location, color, velocity) {
-    super(board, location, velocity);
+  constructor(board) {
+    super(board);
     this.color = COLORS.J;
-    this.location = [
-      [90, 0],
-      [120, 0],
-      [150, 0],
-      [150, 30]
+    this.shape = [
+      [6, 6, 6],
+      [0, 0, 6]
     ];
   }
 }

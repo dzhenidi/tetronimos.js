@@ -1,10 +1,18 @@
 import Tile from "./tiles/tile";
+import TileJ from "./tiles/j";
+import Line from "./tiles/line";
+import TileO from "./tiles/o";
+import TileS from "./tiles/s";
+import TileT from "./tiles/t";
+import TileZ from "./tiles/z";
+import TileL from "./tiles/l";
+
+
 import Board from "./board";
 import {
   SQUARE_SIDE,
   STARTING_VELOCITY,
-  MOVES,
-  COLORS
+  MOVES
 } from './tiles/constants';
 
 class Game {
@@ -12,6 +20,7 @@ class Game {
     this.tiles = [];
     this.landedTiles = [];
     this.board = new Board();
+    this.velocity = STARTING_VELOCITY;
   }
 
   addTile() {
@@ -29,7 +38,7 @@ class Game {
       this.addTile();
     } else {
       if (this.gameOver()) {
-        // cancelAnimationFrame();
+        this.velocity = 0;
       } else {
         this.moveTile();
       }
@@ -39,7 +48,7 @@ class Game {
 
   moveTile() {
     let currentTile = this.tiles[this.tiles.length - 1];
-    currentTile.drop(STARTING_VELOCITY);
+    currentTile.drop(this.velocity);
     if (currentTile.landed) {
       this.landedTiles.push(currentTile);
       this.addTile()
@@ -59,8 +68,8 @@ class Game {
     ctx.fillStyle = Game.BG_COLOR;
     ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
 
-    this.landedTiles.forEach( tile => tile.draw(ctx));
-
+    // this.landedTiles.forEach( tile => tile.draw(ctx));
+    this.board.draw(ctx);
     if (!this.tiles[this.tiles.length - 1].landed) {
       this.tiles[this.tiles.length - 1].draw(ctx);
     }
@@ -80,20 +89,38 @@ class Game {
   // }
 
   randomTile(){
-    let shape = [
-      [1, 1],
-      [1, 1]
-    ];
-    let topLeft = { row: 0, col: 4 };
-    let tile = new Tile(this.board, shape, topLeft);
-    return tile;
-  }
 
+    const num = Math.floor(Math.random() * Game.NUM_PIECES + 1);
+    switch (num) {
+      case 1:
+        return new TileO(this.board);
+        break;
+      case 2:
+        return new Line(this.board);
+        break;
+      case 3:
+        return new TileJ(this.board);
+        break;
+      case 4:
+        return new TileS(this.board);
+        break;
+      case 5:
+        return new TileT(this.board);
+        break;
+      case 6:
+        return new TileZ(this.board);
+        break;
+      case 7:
+        return new TileL(this.board);
+        break;
+    }
+  }
 }
 
 Game.DIM_X = 300;
 Game.DIM_Y = 600;
 Game.BG_COLOR = 'green';
+Game.NUM_PIECES = 7;
 
 
 export default Game;

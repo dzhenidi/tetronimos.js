@@ -6,10 +6,9 @@ import {
 } from './constants';
 
 class Tile {
-  constructor(board, shape, topLeft) {
+  constructor(board) {
     this.board = board;
-    this.shape = shape;
-    this.topLeft = topLeft;
+    this.topLeft = { row: 0, col: 4 };
     this.landed = false;
   }
 
@@ -51,6 +50,7 @@ class Tile {
   land(){
     this.board.add(this);
     this.landed = true;
+    debugger
   }
 
   tileWillCollide() {
@@ -76,20 +76,6 @@ class Tile {
     }
   }
 
-
-
-  // draw(ctx) {
-  //   this.location.forEach( square => {
-  //     ctx.beginPath();
-  //     ctx.rect(square[0], square[1], SQUARE_SIDE, SQUARE_SIDE);
-  //     ctx.fillStyle = this.color;
-  //     ctx.fill();
-  //     ctx.lineWidth = 1;
-  //     ctx.strokeStyle = 'black';
-  //     ctx.stroke();
-  //   });
-  // }
-
   draw(ctx) {
     for (let row = 0; row < this.shape.length; row++) {
       for (let col = 0; col < this.shape[row].length; col++) {
@@ -99,7 +85,7 @@ class Tile {
           let y = this.topLeft.row + row;
           ctx.beginPath();
           ctx.rect(x * 30, y * 30, SQUARE_SIDE, SQUARE_SIDE);
-          ctx.fillStyle = COLORS[1];
+          ctx.fillStyle = this.color;
           ctx.fill();
           ctx.lineWidth = 1;
           ctx.strokeStyle = 'black';
