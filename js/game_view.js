@@ -22,6 +22,7 @@ class GameView {
       key(k, () => {
         this.game.tiles[this.game.tiles.length - 1].move(direction);
       });
+      key('q', () => { this.game.tiles[this.game.tiles.length -1].rotate('countercw')});
     });
   }
 

@@ -28,7 +28,7 @@ class Tile {
             row: Math.floor(this.topLeft.row),
             col: this.topLeft.col + 1
           };
-        if (this.tileWillCollide(potentialTopLeft)) {
+        if (this.tileWillCollide(potentialTopLeft, this.shape)) {
           // this.land();
         } else {
           this.topLeft.col += 1;
@@ -40,7 +40,7 @@ class Tile {
           row: Math.floor(this.topLeft.row),
           col: this.topLeft.col - 1
         };
-        if (this.tileWillCollide(potentialTopLeft)) {
+        if (this.tileWillCollide(potentialTopLeft, this.shape)) {
           // this.land();
         } else {
           this.topLeft.col -= 1;
@@ -51,7 +51,7 @@ class Tile {
         potentialTopLeft = Object.assign(
           {}, this.topLeft, { row: Math.floor(this.topLeft.row) + 1 }
         );
-        if (this.tileWillCollide(potentialTopLeft)) {
+        if (this.tileWillCollide(potentialTopLeft, this.shape)) {
           this.land();
         } else {
           this.topLeft.row += 1;
@@ -65,10 +65,10 @@ class Tile {
     this.landed = true;
   }
 
-  tileWillCollide(potentialTopLeft) {
-    for (let row = 0; row < this.shape.length; row++) {
-      for (let col = 0; col < this.shape[row].length; col++) {
-        if (this.shape[row][col] !== 0) {
+  tileWillCollide(potentialTopLeft, potentialShape) {
+    for (let row = 0; row < potentialShape.length; row++) {
+      for (let col = 0; col < potentialShape[row].length; col++) {
+        if (potentialShape[row][col] !== 0) {
           let boardRow = row + potentialTopLeft.row;
           let boardCol = col + potentialTopLeft.col;
           if (this.board.occupied(boardRow, boardCol)) {
@@ -84,7 +84,7 @@ class Tile {
     let potentialTopLeft = Object.assign(
       {}, this.topLeft, { row: Math.floor(this.topLeft.row) + 1 }
     );
-    if (this.tileWillCollide(potentialTopLeft)) {
+    if (this.tileWillCollide(potentialTopLeft, this.shape)) {
       this.land();
     } else {
       this.topLeft.row += velocity/30;
@@ -108,6 +108,45 @@ class Tile {
         }
       }
     }
+  }
+
+  rotate(direction) {
+    switch (direction) {
+      case 'countercw':
+        let potentialTopLeft = Object.assign(
+          {}, this.topLeft, { row: Math.floor(this.topLeft.row) }
+        );
+        let potentialShape = this.potentialShape(direction);
+        if (!this.tileWillCollide(potentialTopLeft, potentialShape)) {
+          this.shape = this.potentialShape(direction);
+        }
+      break;
+    }
+  }
+
+  potentialShape(direction) {
+    const newShape = [
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0]
+    ];
+
+    for (let row = 0; row < this.shape.length; row++) {
+      for (let col = 0; col < this.shape[row].length; col++) {
+        if (this.shape[row][col] !== 0) {
+          let x = col;
+          let y = row;
+          let xD = (1 - x) || 0;
+          let yD = (1 - y) || 0;
+          let yNew = 1 + xD;
+          let xNew = 1 + (yD * -1);
+          // debugger
+          newShape[yNew][xNew] = this.shape[y][x];
+        }
+      }
+    }
+
+    return newShape;
   }
 
 

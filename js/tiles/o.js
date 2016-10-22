@@ -11,6 +11,10 @@ class TileO extends Tile {
       [1, 1]
     ];
   }
+
+  rotate(){
+    //override super
+  }
 }
 
 export default TileO;

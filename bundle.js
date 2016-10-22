@@ -281,7 +281,7 @@
 	            row: Math.floor(this.topLeft.row),
 	            col: this.topLeft.col + 1
 	          };
-	          if (this.tileWillCollide(potentialTopLeft)) {
+	          if (this.tileWillCollide(potentialTopLeft, this.shape)) {
 	            // this.land();
 	          } else {
 	            this.topLeft.col += 1;
@@ -293,7 +293,7 @@
 	            row: Math.floor(this.topLeft.row),
 	            col: this.topLeft.col - 1
 	          };
-	          if (this.tileWillCollide(potentialTopLeft)) {
+	          if (this.tileWillCollide(potentialTopLeft, this.shape)) {
 	            // this.land();
 	          } else {
 	            this.topLeft.col -= 1;
@@ -302,7 +302,7 @@
 	
 	        case _constants.MOVES.DOWN:
 	          potentialTopLeft = Object.assign({}, this.topLeft, { row: Math.floor(this.topLeft.row) + 1 });
-	          if (this.tileWillCollide(potentialTopLeft)) {
+	          if (this.tileWillCollide(potentialTopLeft, this.shape)) {
 	            this.land();
 	          } else {
 	            this.topLeft.row += 1;
@@ -318,10 +318,10 @@
 	    }
 	  }, {
 	    key: 'tileWillCollide',
-	    value: function tileWillCollide(potentialTopLeft) {
-	      for (var row = 0; row < this.shape.length; row++) {
-	        for (var col = 0; col < this.shape[row].length; col++) {
-	          if (this.shape[row][col] !== 0) {
+	    value: function tileWillCollide(potentialTopLeft, potentialShape) {
+	      for (var row = 0; row < potentialShape.length; row++) {
+	        for (var col = 0; col < potentialShape[row].length; col++) {
+	          if (potentialShape[row][col] !== 0) {
 	            var boardRow = row + potentialTopLeft.row;
 	            var boardCol = col + potentialTopLeft.col;
 	            if (this.board.occupied(boardRow, boardCol)) {
@@ -336,7 +336,7 @@
 	    key: 'drop',
 	    value: function drop(velocity) {
 	      var potentialTopLeft = Object.assign({}, this.topLeft, { row: Math.floor(this.topLeft.row) + 1 });
-	      if (this.tileWillCollide(potentialTopLeft)) {
+	      if (this.tileWillCollide(potentialTopLeft, this.shape)) {
 	        this.land();
 	      } else {
 	        this.topLeft.row += velocity / 30;
@@ -361,6 +361,41 @@
 	          }
 	        }
 	      }
+	    }
+	  }, {
+	    key: 'rotate',
+	    value: function rotate(direction) {
+	      switch (direction) {
+	        case 'countercw':
+	          var potentialTopLeft = Object.assign({}, this.topLeft, { row: Math.floor(this.topLeft.row) });
+	          var potentialShape = this.potentialShape(direction);
+	          if (!this.tileWillCollide(potentialTopLeft, potentialShape)) {
+	            this.shape = this.potentialShape(direction);
+	          }
+	          break;
+	      }
+	    }
+	  }, {
+	    key: 'potentialShape',
+	    value: function potentialShape(direction) {
+	      var newShape = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+	
+	      for (var row = 0; row < this.shape.length; row++) {
+	        for (var col = 0; col < this.shape[row].length; col++) {
+	          if (this.shape[row][col] !== 0) {
+	            var x = col;
+	            var y = row;
+	            var xD = 1 - x || 0;
+	            var yD = 1 - y || 0;
+	            var yNew = 1 + xD;
+	            var xNew = 1 + yD * -1;
+	            // debugger
+	            newShape[yNew][xNew] = this.shape[y][x];
+	          }
+	        }
+	      }
+	
+	      return newShape;
 	    }
 	  }]);
 	
@@ -443,7 +478,7 @@
 	    var _this = _possibleConstructorReturn(this, (TileJ.__proto__ || Object.getPrototypeOf(TileJ)).call(this, board));
 	
 	    _this.color = _constants.COLORS.J;
-	    _this.shape = [[6, 6, 6], [0, 0, 6]];
+	    _this.shape = [[0, 0, 0], [6, 6, 6], [0, 0, 6]];
 	    return _this;
 	  }
 	
@@ -461,6 +496,8 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _tile = __webpack_require__(2);
 	
@@ -485,9 +522,40 @@
 	    var _this = _possibleConstructorReturn(this, (Line.__proto__ || Object.getPrototypeOf(Line)).call(this, board));
 	
 	    _this.color = _constants.COLORS.line;
-	    _this.shape = [[2, 2, 2, 2], [0, 0, 0, 0]];
+	    _this.shape = [[2, 2, 2, 2]];
 	    return _this;
 	  }
+	
+	  _createClass(Line, [{
+	    key: "rotate",
+	    value: function rotate(direction) {
+	      switch (direction) {
+	        case 'countercw':
+	          if (this.shape.length === 1) {
+	            var potentialTopLeft = {
+	              row: Math.floor(this.topLeft.row) - 1,
+	              col: this.topLeft.col + 2
+	            };
+	            var potentialShape = [[2], [2], [2], [2]];
+	            if (!this.tileWillCollide(potentialTopLeft, potentialShape)) {
+	              this.shape = potentialShape;
+	              this.topLeft = potentialTopLeft;
+	            }
+	          } else {
+	            var _potentialTopLeft = {
+	              row: Math.floor(this.topLeft.row) + 1,
+	              col: this.topLeft.col - 2
+	            };
+	            var _potentialShape = [[2, 2, 2, 2]];
+	            if (!this.tileWillCollide(_potentialTopLeft, _potentialShape)) {
+	              this.shape = _potentialShape;
+	              this.topLeft = _potentialTopLeft;
+	            }
+	          }
+	          break;
+	      }
+	    }
+	  }]);
 	
 	  return Line;
 	}(_tile2.default);
@@ -503,6 +571,8 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _tile = __webpack_require__(2);
 	
@@ -530,6 +600,13 @@
 	    _this.shape = [[1, 1], [1, 1]];
 	    return _this;
 	  }
+	
+	  _createClass(TileO, [{
+	    key: "rotate",
+	    value: function rotate() {
+	      //override super
+	    }
+	  }]);
 	
 	  return TileO;
 	}(_tile2.default);
@@ -569,7 +646,7 @@
 	    var _this = _possibleConstructorReturn(this, (TileS.__proto__ || Object.getPrototypeOf(TileS)).call(this, board));
 	
 	    _this.color = _constants.COLORS.S;
-	    _this.shape = [[0, 4, 4], [4, 4, 0]];
+	    _this.shape = [[0, 0, 0], [0, 4, 4], [4, 4, 0]];
 	    return _this;
 	  }
 	
@@ -611,7 +688,7 @@
 	    var _this = _possibleConstructorReturn(this, (TileT.__proto__ || Object.getPrototypeOf(TileT)).call(this, board));
 	
 	    _this.color = _constants.COLORS.T;
-	    _this.shape = [[3, 3, 3], [0, 3, 0]];
+	    _this.shape = [[0, 0, 0], [3, 3, 3], [0, 3, 0]];
 	    return _this;
 	  }
 	
@@ -653,7 +730,7 @@
 	    var _this = _possibleConstructorReturn(this, (TileZ.__proto__ || Object.getPrototypeOf(TileZ)).call(this, board));
 	
 	    _this.color = _constants.COLORS.Z;
-	    _this.shape = [[5, 5, 0], [0, 5, 5]];
+	    _this.shape = [[0, 0, 0], [5, 5, 0], [0, 5, 5]];
 	    return _this;
 	  }
 	
@@ -695,7 +772,7 @@
 	    var _this = _possibleConstructorReturn(this, (TileL.__proto__ || Object.getPrototypeOf(TileL)).call(this, board));
 	
 	    _this.color = _constants.COLORS.L;
-	    _this.shape = [[7, 7, 7], [7, 0, 0]];
+	    _this.shape = [[0, 0, 0], [7, 7, 7], [7, 0, 0]];
 	    return _this;
 	  }
 	
@@ -811,7 +888,7 @@
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -837,7 +914,7 @@
 	  }
 	
 	  _createClass(GameView, [{
-	    key: "start",
+	    key: 'start',
 	    value: function start() {
 	      this.bindKeyHandlers();
 	      this.lastTime = 0;
@@ -845,7 +922,7 @@
 	      // setTimeout(this.animate.bind(this), 1000/30);
 	    }
 	  }, {
-	    key: "bindKeyHandlers",
+	    key: 'bindKeyHandlers',
 	    value: function bindKeyHandlers() {
 	      var _this = this;
 	
@@ -854,13 +931,16 @@
 	        key(k, function () {
 	          _this.game.tiles[_this.game.tiles.length - 1].move(direction);
 	        });
+	        key('q', function () {
+	          _this.game.tiles[_this.game.tiles.length - 1].rotate('countercw');
+	        });
 	      });
 	    }
 	
 	    // pass argument time to animate to timestamp animations
 	
 	  }, {
-	    key: "animate",
+	    key: 'animate',
 	    value: function animate(time) {
 	      var timeDelta = time - this.lastTime;
 	

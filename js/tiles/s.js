@@ -7,6 +7,7 @@ class TileS extends Tile {
     super(board);
     this.color = COLORS.S;
     this.shape = [
+      [0, 0, 0],
       [0, 4, 4],
       [4, 4, 0]
     ];
