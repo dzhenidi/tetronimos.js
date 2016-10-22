@@ -13,32 +13,45 @@ class Tile {
   }
 
 
-  potentialTopLeft() {
-    return {
-      row: Math.floor(this.topLeft.row) + 1,
-      col: Math.floor(this.topLeft.col) + 1};
-  }
+  // potentialTopLeft() {
+  //   return {
+  //     row: Math.floor(this.topLeft.row) + 1,
+  //     col: Math.floor(this.topLeft.col)};
+  // }
+
+
 
   move(direction, velocity) {
     switch (direction) {
       case MOVES.RIGHT:
-        if (this.tileWillCollide()) {
-          this.land();
+        let potentialTopLeft = {
+            row: Math.floor(this.topLeft.row),
+            col: this.topLeft.col + 1
+          };
+        if (this.tileWillCollide(potentialTopLeft)) {
+          // this.land();
         } else {
           this.topLeft.col += 1;
         }
       break;
 
       case MOVES.LEFT:
-        if (this.tileWillCollide()) {
-          this.land();
+        potentialTopLeft = {
+          row: Math.floor(this.topLeft.row),
+          col: this.topLeft.col - 1
+        };
+        if (this.tileWillCollide(potentialTopLeft)) {
+          // this.land();
         } else {
           this.topLeft.col -= 1;
         }
       break;
 
       case MOVES.DOWN:
-        if (this.tileWillCollide()) {
+        potentialTopLeft = Object.assign(
+          {}, this.topLeft, { row: Math.floor(this.topLeft.row) + 1 }
+        );
+        if (this.tileWillCollide(potentialTopLeft)) {
           this.land();
         } else {
           this.topLeft.row += 1;
@@ -50,16 +63,15 @@ class Tile {
   land(){
     this.board.add(this);
     this.landed = true;
-    debugger
   }
 
-  tileWillCollide() {
+  tileWillCollide(potentialTopLeft) {
     for (let row = 0; row < this.shape.length; row++) {
       for (let col = 0; col < this.shape[row].length; col++) {
         if (this.shape[row][col] !== 0) {
-          let boardRow = row + this.potentialTopLeft().row;
-          let boardCol = col + this.potentialTopLeft().col;
-          if (this.board.blockWillCollide(boardRow, boardCol)) {
+          let boardRow = row + potentialTopLeft.row;
+          let boardCol = col + potentialTopLeft.col;
+          if (this.board.occupied(boardRow, boardCol)) {
             return true;
           }
         }
@@ -69,7 +81,10 @@ class Tile {
   }
 
   drop(velocity) {
-    if (this.tileWillCollide()) {
+    let potentialTopLeft = Object.assign(
+      {}, this.topLeft, { row: Math.floor(this.topLeft.row) + 1 }
+    );
+    if (this.tileWillCollide(potentialTopLeft)) {
       this.land();
     } else {
       this.topLeft.row += velocity/30;

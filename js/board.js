@@ -19,12 +19,15 @@ class Board {
       for (let col = 0; col < tile.shape[row].length; col++) {
         let gridCol = tile.topLeft.col + col;
         let gridRow = Math.floor(tile.topLeft.row) + row;
-        this.grid[gridRow][gridCol] = tile.shape[row][col];
+        if (tile.shape[row][col] !== 0) {
+          this.grid[gridRow][gridCol] = tile.shape[row][col];
+        }
+        // debugger
       }
     }
   }
 
-  blockWillCollide(row, col) {
+  occupied(row, col) {
     if (row > 19 || this.grid[row][col] !== 0) {
       return true;
     } else {

@@ -17,17 +17,18 @@ class GameView {
   }
 
   bindKeyHandlers() {
-    let tile = this.game.tiles[this.game.tiles.length - 1];
     Object.keys(GameView.MOVES).forEach( k => {
       let direction = GameView.MOVES[k];
-      key(k, () => {tile.move(direction)});
+      key(k, () => {
+        this.game.tiles[this.game.tiles.length - 1].move(direction);
+      });
     });
   }
 
   // pass argument time to animate to timestamp animations
   animate(time) {
     const timeDelta = time - this.lastTime;
-    
+
     this.game.step(timeDelta, this.ctx);
     this.game.draw(this.ctx);
     this.lastTime = time;

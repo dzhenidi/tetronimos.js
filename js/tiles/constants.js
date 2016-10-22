@@ -1,6 +1,6 @@
 export const SQUARE_SIDE = 30;
 
-export const STARTING_VELOCITY = 5;
+export const STARTING_VELOCITY = 2;
 
 export const MOVES = {
   LEFT : "left",

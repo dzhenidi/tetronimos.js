@@ -50,7 +50,7 @@
 	
 	var _game2 = _interopRequireDefault(_game);
 	
-	var _game_view = __webpack_require__(5);
+	var _game_view = __webpack_require__(12);
 	
 	var _game_view2 = _interopRequireDefault(_game_view);
 	
@@ -82,39 +82,39 @@
 	
 	var _tile2 = _interopRequireDefault(_tile);
 	
-	var _j = __webpack_require__(6);
+	var _j = __webpack_require__(4);
 	
 	var _j2 = _interopRequireDefault(_j);
 	
-	var _line = __webpack_require__(7);
+	var _line = __webpack_require__(5);
 	
 	var _line2 = _interopRequireDefault(_line);
 	
-	var _o = __webpack_require__(8);
+	var _o = __webpack_require__(6);
 	
 	var _o2 = _interopRequireDefault(_o);
 	
-	var _s = __webpack_require__(9);
+	var _s = __webpack_require__(7);
 	
 	var _s2 = _interopRequireDefault(_s);
 	
-	var _t = __webpack_require__(10);
+	var _t = __webpack_require__(8);
 	
 	var _t2 = _interopRequireDefault(_t);
 	
-	var _z = __webpack_require__(11);
+	var _z = __webpack_require__(9);
 	
 	var _z2 = _interopRequireDefault(_z);
 	
-	var _l = __webpack_require__(12);
+	var _l = __webpack_require__(10);
 	
 	var _l2 = _interopRequireDefault(_l);
 	
-	var _board = __webpack_require__(3);
+	var _board = __webpack_require__(11);
 	
 	var _board2 = _interopRequireDefault(_board);
 	
-	var _constants = __webpack_require__(4);
+	var _constants = __webpack_require__(3);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -252,7 +252,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _constants = __webpack_require__(4);
+	var _constants = __webpack_require__(3);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -265,35 +265,44 @@
 	    this.landed = false;
 	  }
 	
+	  // potentialTopLeft() {
+	  //   return {
+	  //     row: Math.floor(this.topLeft.row) + 1,
+	  //     col: Math.floor(this.topLeft.col)};
+	  // }
+	
+	
 	  _createClass(Tile, [{
-	    key: 'potentialTopLeft',
-	    value: function potentialTopLeft() {
-	      return {
-	        row: Math.floor(this.topLeft.row) + 1,
-	        col: Math.floor(this.topLeft.col) + 1 };
-	    }
-	  }, {
 	    key: 'move',
 	    value: function move(direction, velocity) {
 	      switch (direction) {
 	        case _constants.MOVES.RIGHT:
-	          if (this.tileWillCollide()) {
-	            this.land();
+	          var potentialTopLeft = {
+	            row: Math.floor(this.topLeft.row),
+	            col: this.topLeft.col + 1
+	          };
+	          if (this.tileWillCollide(potentialTopLeft)) {
+	            // this.land();
 	          } else {
 	            this.topLeft.col += 1;
 	          }
 	          break;
 	
 	        case _constants.MOVES.LEFT:
-	          if (this.tileWillCollide()) {
-	            this.land();
+	          potentialTopLeft = {
+	            row: Math.floor(this.topLeft.row),
+	            col: this.topLeft.col - 1
+	          };
+	          if (this.tileWillCollide(potentialTopLeft)) {
+	            // this.land();
 	          } else {
 	            this.topLeft.col -= 1;
 	          }
 	          break;
 	
 	        case _constants.MOVES.DOWN:
-	          if (this.tileWillCollide()) {
+	          potentialTopLeft = Object.assign({}, this.topLeft, { row: Math.floor(this.topLeft.row) + 1 });
+	          if (this.tileWillCollide(potentialTopLeft)) {
 	            this.land();
 	          } else {
 	            this.topLeft.row += 1;
@@ -306,17 +315,16 @@
 	    value: function land() {
 	      this.board.add(this);
 	      this.landed = true;
-	      debugger;
 	    }
 	  }, {
 	    key: 'tileWillCollide',
-	    value: function tileWillCollide() {
+	    value: function tileWillCollide(potentialTopLeft) {
 	      for (var row = 0; row < this.shape.length; row++) {
 	        for (var col = 0; col < this.shape[row].length; col++) {
 	          if (this.shape[row][col] !== 0) {
-	            var boardRow = row + this.potentialTopLeft().row;
-	            var boardCol = col + this.potentialTopLeft().col;
-	            if (this.board.blockWillCollide(boardRow, boardCol)) {
+	            var boardRow = row + potentialTopLeft.row;
+	            var boardCol = col + potentialTopLeft.col;
+	            if (this.board.occupied(boardRow, boardCol)) {
 	              return true;
 	            }
 	          }
@@ -327,7 +335,8 @@
 	  }, {
 	    key: 'drop',
 	    value: function drop(velocity) {
-	      if (this.tileWillCollide()) {
+	      var potentialTopLeft = Object.assign({}, this.topLeft, { row: Math.floor(this.topLeft.row) + 1 });
+	      if (this.tileWillCollide(potentialTopLeft)) {
 	        this.land();
 	      } else {
 	        this.topLeft.row += velocity / 30;
@@ -362,6 +371,341 @@
 
 /***/ },
 /* 3 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var SQUARE_SIDE = exports.SQUARE_SIDE = 30;
+	
+	var STARTING_VELOCITY = exports.STARTING_VELOCITY = 2;
+	
+	var MOVES = exports.MOVES = {
+	  LEFT: "left",
+	  RIGHT: "right",
+	  DOWN: "down"
+	};
+	
+	var COLORS = exports.COLORS = {
+	  0: 'white', //empty
+	  'line': 'cyan', //line
+	  'O': 'yellow', //O
+	  'T': 'purple', //T
+	  'S': 'green', //S
+	  'Z': 'red', //Z
+	  'J': 'blue', //J
+	  'L': 'orange' //L
+	};
+	
+	var COLORS_NUM = exports.COLORS_NUM = {
+	  0: 'white', //empty
+	  2: 'cyan', //line
+	  1: 'yellow', //O
+	  3: 'purple', //T
+	  4: 'green', //S
+	  5: 'red', //Z
+	  6: 'blue', //J
+	  7: 'orange' //L
+	};
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _tile = __webpack_require__(2);
+	
+	var _tile2 = _interopRequireDefault(_tile);
+	
+	var _constants = __webpack_require__(3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TileJ = function (_Tile) {
+	  _inherits(TileJ, _Tile);
+	
+	  function TileJ(board) {
+	    _classCallCheck(this, TileJ);
+	
+	    var _this = _possibleConstructorReturn(this, (TileJ.__proto__ || Object.getPrototypeOf(TileJ)).call(this, board));
+	
+	    _this.color = _constants.COLORS.J;
+	    _this.shape = [[6, 6, 6], [0, 0, 6]];
+	    return _this;
+	  }
+	
+	  return TileJ;
+	}(_tile2.default);
+	
+	exports.default = TileJ;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _tile = __webpack_require__(2);
+	
+	var _tile2 = _interopRequireDefault(_tile);
+	
+	var _constants = __webpack_require__(3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Line = function (_Tile) {
+	  _inherits(Line, _Tile);
+	
+	  function Line(board) {
+	    _classCallCheck(this, Line);
+	
+	    var _this = _possibleConstructorReturn(this, (Line.__proto__ || Object.getPrototypeOf(Line)).call(this, board));
+	
+	    _this.color = _constants.COLORS.line;
+	    _this.shape = [[2, 2, 2, 2], [0, 0, 0, 0]];
+	    return _this;
+	  }
+	
+	  return Line;
+	}(_tile2.default);
+	
+	exports.default = Line;
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _tile = __webpack_require__(2);
+	
+	var _tile2 = _interopRequireDefault(_tile);
+	
+	var _constants = __webpack_require__(3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TileO = function (_Tile) {
+	  _inherits(TileO, _Tile);
+	
+	  function TileO(board) {
+	    _classCallCheck(this, TileO);
+	
+	    var _this = _possibleConstructorReturn(this, (TileO.__proto__ || Object.getPrototypeOf(TileO)).call(this, board));
+	
+	    _this.color = _constants.COLORS.O;
+	    _this.shape = [[1, 1], [1, 1]];
+	    return _this;
+	  }
+	
+	  return TileO;
+	}(_tile2.default);
+	
+	exports.default = TileO;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _tile = __webpack_require__(2);
+	
+	var _tile2 = _interopRequireDefault(_tile);
+	
+	var _constants = __webpack_require__(3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TileS = function (_Tile) {
+	  _inherits(TileS, _Tile);
+	
+	  function TileS(board) {
+	    _classCallCheck(this, TileS);
+	
+	    var _this = _possibleConstructorReturn(this, (TileS.__proto__ || Object.getPrototypeOf(TileS)).call(this, board));
+	
+	    _this.color = _constants.COLORS.S;
+	    _this.shape = [[0, 4, 4], [4, 4, 0]];
+	    return _this;
+	  }
+	
+	  return TileS;
+	}(_tile2.default);
+	
+	exports.default = TileS;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _tile = __webpack_require__(2);
+	
+	var _tile2 = _interopRequireDefault(_tile);
+	
+	var _constants = __webpack_require__(3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TileT = function (_Tile) {
+	  _inherits(TileT, _Tile);
+	
+	  function TileT(board) {
+	    _classCallCheck(this, TileT);
+	
+	    var _this = _possibleConstructorReturn(this, (TileT.__proto__ || Object.getPrototypeOf(TileT)).call(this, board));
+	
+	    _this.color = _constants.COLORS.T;
+	    _this.shape = [[3, 3, 3], [0, 3, 0]];
+	    return _this;
+	  }
+	
+	  return TileT;
+	}(_tile2.default);
+	
+	exports.default = TileT;
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _tile = __webpack_require__(2);
+	
+	var _tile2 = _interopRequireDefault(_tile);
+	
+	var _constants = __webpack_require__(3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TileZ = function (_Tile) {
+	  _inherits(TileZ, _Tile);
+	
+	  function TileZ(board) {
+	    _classCallCheck(this, TileZ);
+	
+	    var _this = _possibleConstructorReturn(this, (TileZ.__proto__ || Object.getPrototypeOf(TileZ)).call(this, board));
+	
+	    _this.color = _constants.COLORS.Z;
+	    _this.shape = [[5, 5, 0], [0, 5, 5]];
+	    return _this;
+	  }
+	
+	  return TileZ;
+	}(_tile2.default);
+	
+	exports.default = TileZ;
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _tile = __webpack_require__(2);
+	
+	var _tile2 = _interopRequireDefault(_tile);
+	
+	var _constants = __webpack_require__(3);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TileL = function (_Tile) {
+	  _inherits(TileL, _Tile);
+	
+	  function TileL(board) {
+	    _classCallCheck(this, TileL);
+	
+	    var _this = _possibleConstructorReturn(this, (TileL.__proto__ || Object.getPrototypeOf(TileL)).call(this, board));
+	
+	    _this.color = _constants.COLORS.L;
+	    _this.shape = [[7, 7, 7], [7, 0, 0]];
+	    return _this;
+	  }
+	
+	  return TileL;
+	}(_tile2.default);
+	
+	exports.default = TileL;
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -372,7 +716,7 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _constants = __webpack_require__(4);
+	var _constants = __webpack_require__(3);
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -396,13 +740,16 @@
 	        for (var col = 0; col < tile.shape[row].length; col++) {
 	          var gridCol = tile.topLeft.col + col;
 	          var gridRow = Math.floor(tile.topLeft.row) + row;
-	          this.grid[gridRow][gridCol] = tile.shape[row][col];
+	          if (tile.shape[row][col] !== 0) {
+	            this.grid[gridRow][gridCol] = tile.shape[row][col];
+	          }
+	          // debugger
 	        }
 	      }
 	    }
 	  }, {
-	    key: 'blockWillCollide',
-	    value: function blockWillCollide(row, col) {
+	    key: 'occupied',
+	    value: function occupied(row, col) {
 	      if (row > 19 || this.grid[row][col] !== 0) {
 	        return true;
 	      } else {
@@ -461,48 +808,7 @@
 	exports.default = Board;
 
 /***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var SQUARE_SIDE = exports.SQUARE_SIDE = 30;
-	
-	var STARTING_VELOCITY = exports.STARTING_VELOCITY = 5;
-	
-	var MOVES = exports.MOVES = {
-	  LEFT: "left",
-	  RIGHT: "right",
-	  DOWN: "down"
-	};
-	
-	var COLORS = exports.COLORS = {
-	  0: 'white', //empty
-	  'line': 'cyan', //line
-	  'O': 'yellow', //O
-	  'T': 'purple', //T
-	  'S': 'green', //S
-	  'Z': 'red', //Z
-	  'J': 'blue', //J
-	  'L': 'orange' //L
-	};
-	
-	var COLORS_NUM = exports.COLORS_NUM = {
-	  0: 'white', //empty
-	  2: 'cyan', //line
-	  1: 'yellow', //O
-	  3: 'purple', //T
-	  4: 'green', //S
-	  5: 'red', //Z
-	  6: 'blue', //J
-	  7: 'orange' //L
-	};
-
-/***/ },
-/* 5 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -541,11 +847,12 @@
 	  }, {
 	    key: "bindKeyHandlers",
 	    value: function bindKeyHandlers() {
-	      var tile = this.game.tiles[this.game.tiles.length - 1];
+	      var _this = this;
+	
 	      Object.keys(GameView.MOVES).forEach(function (k) {
 	        var direction = GameView.MOVES[k];
 	        key(k, function () {
-	          tile.move(direction);
+	          _this.game.tiles[_this.game.tiles.length - 1].move(direction);
 	        });
 	      });
 	    }
@@ -576,300 +883,6 @@
 	};
 	
 	exports.default = GameView;
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _tile = __webpack_require__(2);
-	
-	var _tile2 = _interopRequireDefault(_tile);
-	
-	var _constants = __webpack_require__(4);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var TileJ = function (_Tile) {
-	  _inherits(TileJ, _Tile);
-	
-	  function TileJ(board) {
-	    _classCallCheck(this, TileJ);
-	
-	    var _this = _possibleConstructorReturn(this, (TileJ.__proto__ || Object.getPrototypeOf(TileJ)).call(this, board));
-	
-	    _this.color = _constants.COLORS.J;
-	    _this.shape = [[6, 6, 6], [0, 0, 6]];
-	    return _this;
-	  }
-	
-	  return TileJ;
-	}(_tile2.default);
-	
-	exports.default = TileJ;
-
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _tile = __webpack_require__(2);
-	
-	var _tile2 = _interopRequireDefault(_tile);
-	
-	var _constants = __webpack_require__(4);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var Line = function (_Tile) {
-	  _inherits(Line, _Tile);
-	
-	  function Line(board) {
-	    _classCallCheck(this, Line);
-	
-	    var _this = _possibleConstructorReturn(this, (Line.__proto__ || Object.getPrototypeOf(Line)).call(this, board));
-	
-	    _this.color = _constants.COLORS.Line;
-	    _this.shape = [[2, 2, 2, 2], [0, 0, 0, 0]];
-	    return _this;
-	  }
-	
-	  return Line;
-	}(_tile2.default);
-	
-	exports.default = Line;
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _tile = __webpack_require__(2);
-	
-	var _tile2 = _interopRequireDefault(_tile);
-	
-	var _constants = __webpack_require__(4);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var TileO = function (_Tile) {
-	  _inherits(TileO, _Tile);
-	
-	  function TileO(board) {
-	    _classCallCheck(this, TileO);
-	
-	    var _this = _possibleConstructorReturn(this, (TileO.__proto__ || Object.getPrototypeOf(TileO)).call(this, board));
-	
-	    _this.color = _constants.COLORS.O;
-	    _this.shape = [[1, 1], [1, 1]];
-	    return _this;
-	  }
-	
-	  return TileO;
-	}(_tile2.default);
-	
-	exports.default = TileO;
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _tile = __webpack_require__(2);
-	
-	var _tile2 = _interopRequireDefault(_tile);
-	
-	var _constants = __webpack_require__(4);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var TileS = function (_Tile) {
-	  _inherits(TileS, _Tile);
-	
-	  function TileS(board) {
-	    _classCallCheck(this, TileS);
-	
-	    var _this = _possibleConstructorReturn(this, (TileS.__proto__ || Object.getPrototypeOf(TileS)).call(this, board));
-	
-	    _this.color = _constants.COLORS.S;
-	    _this.shape = [[0, 4, 4], [4, 4, 0]];
-	    return _this;
-	  }
-	
-	  return TileS;
-	}(_tile2.default);
-	
-	exports.default = TileS;
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _tile = __webpack_require__(2);
-	
-	var _tile2 = _interopRequireDefault(_tile);
-	
-	var _constants = __webpack_require__(4);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var TileT = function (_Tile) {
-	  _inherits(TileT, _Tile);
-	
-	  function TileT(board) {
-	    _classCallCheck(this, TileT);
-	
-	    var _this = _possibleConstructorReturn(this, (TileT.__proto__ || Object.getPrototypeOf(TileT)).call(this, board));
-	
-	    _this.color = _constants.COLORS.T;
-	    _this.shape = [[3, 3, 3], [0, 3, 0]];
-	    return _this;
-	  }
-	
-	  return TileT;
-	}(_tile2.default);
-	
-	exports.default = TileT;
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _tile = __webpack_require__(2);
-	
-	var _tile2 = _interopRequireDefault(_tile);
-	
-	var _constants = __webpack_require__(4);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var TileZ = function (_Tile) {
-	  _inherits(TileZ, _Tile);
-	
-	  function TileZ(board) {
-	    _classCallCheck(this, TileZ);
-	
-	    var _this = _possibleConstructorReturn(this, (TileZ.__proto__ || Object.getPrototypeOf(TileZ)).call(this, board));
-	
-	    _this.color = _constants.COLORS.Z;
-	    _this.shape = [[5, 5, 0], [0, 5, 5]];
-	    return _this;
-	  }
-	
-	  return TileZ;
-	}(_tile2.default);
-	
-	exports.default = TileZ;
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _tile = __webpack_require__(2);
-	
-	var _tile2 = _interopRequireDefault(_tile);
-	
-	var _constants = __webpack_require__(4);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var TileL = function (_Tile) {
-	  _inherits(TileL, _Tile);
-	
-	  function TileL(board) {
-	    _classCallCheck(this, TileL);
-	
-	    var _this = _possibleConstructorReturn(this, (TileL.__proto__ || Object.getPrototypeOf(TileL)).call(this, board));
-	
-	    _this.color = _constants.COLORS.L;
-	    _this.shape = [[7, 7, 7], [7, 0, 0]];
-	    return _this;
-	  }
-	
-	  return TileL;
-	}(_tile2.default);
-	
-	exports.default = TileL;
 
 /***/ }
 /******/ ]);
