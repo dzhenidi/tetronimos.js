@@ -198,8 +198,8 @@
 	    value: function clearRows() {
 	      var rowsToClear = this.board.rowsToClear();
 	      if (rowsToClear.length > 0) {
-	        this.calculatePoints(rowsToClear);
 	        this.board.removeRows(rowsToClear);
+	        this.updateScore(this.calculatePoints(rowsToClear));
 	      }
 	    }
 	  }, {
@@ -215,19 +215,12 @@
 	        this.tiles[this.tiles.length - 1].draw(ctx);
 	      }
 	    }
-	
-	    // drawLanded(ctx) {
-	    //   for (let row = 0; row < this.landedBlocks.length; row++) {
-	    //     for (let col = 0; col < this.landedBlocks[row].length; col++) {
-	    //       if (this.landedBlocks[row][col] !== 0) {
-	    //         //match landedBlocks[row][col]'s value to a shape with its color'
-	    //         ctx.fillStyle = 'red';
-	    //         ctx.fillRect(col * 30, row * 30, SQUARE_SIDE, SQUARE_SIDE);
-	    //       }
-	    //     }
-	    //   }
-	    // }
-	
+	  }, {
+	    key: "updateScore",
+	    value: function updateScore(points) {
+	      var scoreTag = document.getElementById('score');
+	      scoreTag.innerHTML = this.score;
+	    }
 	  }, {
 	    key: "randomTile",
 	    value: function randomTile() {

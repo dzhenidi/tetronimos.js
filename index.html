@@ -1,12 +1,45 @@
 <html>
   <head>
     <title>Tetronimos</title>
+    <link rel="stylesheet" href="css/index.css" type="text/css">
   </head>
 
   <body>
-    <canvas></canvas>
+    <main class="content group">
+      <h1>Tetronimos</h1>
+      <section class="sidebar left">
+        <p class="control-keys">
+          <h3>Control Keys</h3>
+          <ul>
+            <li>To start, press "s"</li>
+            <li>To pause, press "p"</li>
+            <li>To move left, press "a"</li>
+            <li>To move right, press "d"</li>
+            <li>To move down, press "s"</li>
+            <li>To rotate, press "q"</li>
+          </ul>
+        </p>
+      </section>
 
+      <section class="main">
+        <canvas id="canvas"></canvas>
+
+      </section>
+
+      <section class="sidebar right">
+        <div class="next-piece">
+          <h3>Next Piece</h3>
+          <div id="next-piece"></div>
+        </div>
+        <div class="score">
+          <h3>Score</h3>
+          <span id="score">0</span>
+        </div>
+      </section>
+
+    </main>
     <script type="application/javascript" src="js/vendor/keymaster.js"></script>
     <script type="application/javascript" src="bundle.js"></script>
+
   </body>
 </html>
