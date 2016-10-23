@@ -85,9 +85,21 @@ h2 {
   padding: 20px 0;
 
 }
+
+.next-piece {
+  display: none;
+}
 .sidebar {
   width: 260px;
   float: left;
-  padding: 20px;
+  padding: 0 20px;
 
+}
+
+.score {
+  border: 1px solid black;
+  text-align: center;
+  width: 150px;
+  padding-bottom: 20px;
+  font-size: 20px;
 }

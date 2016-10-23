@@ -4,9 +4,11 @@ import {
   COLORS_NUM
 } from './tiles/constants';
 
+import { merge } from 'lodash';
+
 class Board {
   constructor(){
-    this.grid = Board.EMPTY_GRID;
+    this.grid = merge([], Board.EMPTY_GRID);
   }
 
   add(tile) {
@@ -55,7 +57,7 @@ class Board {
   }
 
   resetBoard() {
-    this.grid = Board.EMPTY_GRID;
+    this.grid = merge([], Board.EMPTY_GRID);
   }
 
   draw(ctx) {

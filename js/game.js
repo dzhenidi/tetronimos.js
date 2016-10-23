@@ -48,23 +48,30 @@ class Game {
         this.moveTile();
         // this.velocity = 0;
       } else {
-        this.toggleState();
         this.displayGameOver();
         this.resetGame();
+        this.toggleState();
       }
     }
   }
 
   toggleState(){
-    this.state = this.state === "paused" ? "playing" : "paused";
+    if (this.state === "paused") {
+      this.state = "playing";
+      let el = document.getElementById("game-over");
+      el.style.display = '';
+    } else {
+      this.state = "paused";
+    }
   }
 
   resetGame() {
-    this.board.resetBoard();
     this.tiles = [];
     this.velocity = STARTING_VELOCITY;
     this.points = 0;
     this.level = 0;
+    this.updateScore();
+    this.board.resetBoard();
   }
 
   displayGameOver() {
@@ -88,7 +95,6 @@ class Game {
     const n = this.level;
     switch (rowsCleared) {
       case 1:
-      debugger
         this.points += 40 * (n + 1);
         break;
       case 2:
@@ -116,10 +122,10 @@ class Game {
   displayMenu(ctx){
     ctx.fillStyle = "black";
     ctx.font = "italic "+26+"pt sans-serif ";
-    ctx.fillText("Press RETURN", 10, 150);
+    ctx.fillText("Press RETURN", 20, 150);
     ctx.fillStyle = "black";
     ctx.font = "italic "+26+"pt sans-serif ";
-    ctx.fillText("to start/continue", 10, 200);
+    ctx.fillText("to start/continue", 20, 200);
   }
 
   draw(ctx) {
