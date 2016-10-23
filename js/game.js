@@ -23,6 +23,7 @@ class Game {
     this.velocity = STARTING_VELOCITY;
     this.points = 0;
     this.level = 0;
+    this.state = "paused";
   }
 
   addTile() {
@@ -36,24 +37,46 @@ class Game {
   // }
 
   step() {
+    if (this.state === "paused") {
+      return;
+    }
     if (this.tiles.length === 0 || this.tiles[this.tiles.length - 1].landed) {
       this.addTile();
     } else {
       this.clearRows();
-      if (this.gameOver()) {
-        this.velocity = 0;
-      } else {
+      if (!this.gameOver()) {
         this.moveTile();
+        // this.velocity = 0;
+      } else {
+        this.toggleState();
+        this.displayGameOver();
+        this.resetGame();
       }
     }
   }
 
+  toggleState(){
+    this.state = this.state === "paused" ? "playing" : "paused";
+  }
+
+  resetGame() {
+    this.board.resetBoard();
+    this.tiles = [];
+    this.velocity = STARTING_VELOCITY;
+    this.points = 0;
+    this.level = 0;
+  }
+
+  displayGameOver() {
+    let el = document.getElementById("game-over");
+    el.style.display = 'block';
+  }
   moveTile() {
     let currentTile = this.tiles[this.tiles.length - 1];
     currentTile.drop(this.velocity);
     if (currentTile.landed) {
       this.landedTiles.push(currentTile);
-      this.addTile()
+      this.addTile();
     }
   }
 
@@ -63,9 +86,9 @@ class Game {
 
   calculatePoints(rowsCleared){
     const n = this.level;
-
     switch (rowsCleared) {
       case 1:
+      debugger
         this.points += 40 * (n + 1);
         break;
       case 2:
@@ -85,8 +108,18 @@ class Game {
     const rowsToClear = this.board.rowsToClear();
     if (rowsToClear.length > 0) {
       this.board.removeRows(rowsToClear);
-      this.updateScore(this.calculatePoints(rowsToClear));
+      this.calculatePoints(rowsToClear.length);
+      this.updateScore();
     }
+  }
+
+  displayMenu(ctx){
+    ctx.fillStyle = "black";
+    ctx.font = "italic "+26+"pt sans-serif ";
+    ctx.fillText("Press RETURN", 10, 150);
+    ctx.fillStyle = "black";
+    ctx.font = "italic "+26+"pt sans-serif ";
+    ctx.fillText("to start/continue", 10, 200);
   }
 
   draw(ctx) {
@@ -94,17 +127,20 @@ class Game {
     ctx.fillStyle = Game.BG_COLOR;
     ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
 
-    // this.landedTiles.forEach( tile => tile.draw(ctx));
-    this.board.draw(ctx);
-    if (!this.tiles[this.tiles.length - 1].landed) {
-      this.tiles[this.tiles.length - 1].draw(ctx);
+    if (this.state === "paused") {
+      this.displayMenu(ctx);
+    } else {
+      this.board.draw(ctx);
+      if (!this.tiles[this.tiles.length - 1].landed) {
+        this.tiles[this.tiles.length - 1].draw(ctx);
+      }
     }
 
   }
 
-  updateScore(points) {
+  updateScore() {
     let scoreTag = document.getElementById('score');
-    scoreTag.innerHTML = this.score;
+    scoreTag.innerHTML = this.points;
   }
 
   randomTile(){
@@ -113,25 +149,18 @@ class Game {
     switch (num) {
       case 1:
         return new TileO(this.board);
-        break;
       case 2:
         return new Line(this.board);
-        break;
       case 3:
         return new TileJ(this.board);
-        break;
       case 4:
         return new TileS(this.board);
-        break;
       case 5:
         return new TileT(this.board);
-        break;
       case 6:
         return new TileZ(this.board);
-        break;
       case 7:
         return new TileL(this.board);
-        break;
     }
   }
 }

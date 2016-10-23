@@ -6,7 +6,7 @@ class GameView {
   constructor(game, ctx){
     this.ctx = ctx;
     this.game = game;
-    this.game.addTile();
+    // this.state = "paused";
   }
 
   start(){
@@ -17,13 +17,14 @@ class GameView {
   }
 
   bindKeyHandlers() {
+    key('return', () => { this.game.toggleState() });
     Object.keys(GameView.MOVES).forEach( k => {
       let direction = GameView.MOVES[k];
       key(k, () => {
         this.game.tiles[this.game.tiles.length - 1].move(direction);
       });
-      key('q', () => { this.game.tiles[this.game.tiles.length -1].rotate('countercw')});
     });
+    key('q', () => { this.game.tiles[this.game.tiles.length -1].rotate('countercw')});
   }
 
   // pass argument time to animate to timestamp animations
@@ -38,14 +39,18 @@ class GameView {
     // setTimeout(this.animate.bind(this), 1000/30);
   }
 
+  // toggleState(){
+  //   this.state = this.state === "paused" ? "playing" : "paused";
+  // }
+
 
 
 }
 
 GameView.MOVES = {
-  "a": "left",
-  "s": "down",
-  "d": "right"
+  "a, left": "left",
+  "s, down, space": "down",
+  "d, right": "right"
 }
 
 export default GameView;

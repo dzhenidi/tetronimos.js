@@ -49,15 +49,23 @@ body {
 }
 
 h1 {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  padding: 20px 0;
+}
+
+h2 {
   font-size: 24px;
+  font-weight: bold;
   text-align: center;
   padding: 20px 0;
 }
 .content {
-  position: relative;
+  /*position: relative;*/
   margin: 0 auto;
   background: #fff;
-  width: 900px;
+  width: 902px;
   border: 1px solid #ccc;
 }
 
@@ -65,8 +73,20 @@ h1 {
   float: left;
   width: 300px;
   border: 1px solid black;
+  position: relative;
+}
+
+#game-over {
+  display: none;
+  width: 100%;
+  position: absolute;
+  top: 250px;
+  background: #fff;
+  padding: 20px 0;
+
 }
 .sidebar {
+  width: 260px;
   float: left;
   padding: 20px;
 

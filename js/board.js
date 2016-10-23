@@ -9,10 +9,6 @@ class Board {
     this.grid = Board.EMPTY_GRID;
   }
 
-  getBoard() {
-    return Board.EMPTY_GRID;
-  }
-
   add(tile) {
 
     for (let row = 0; row < tile.shape.length; row++) {
@@ -22,7 +18,6 @@ class Board {
         if (tile.shape[row][col] !== 0) {
           this.grid[gridRow][gridCol] = tile.shape[row][col];
         }
-        // debugger
       }
     }
   }
@@ -57,6 +52,10 @@ class Board {
       this.grid.splice(row, 1);
       this.grid.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]);
     });
+  }
+
+  resetBoard() {
+    this.grid = Board.EMPTY_GRID;
   }
 
   draw(ctx) {
