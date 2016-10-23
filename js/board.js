@@ -35,11 +35,28 @@ class Board {
     }
   }
 
+  rowsToClear() {
+    const idxToClear = [];
+    for (let row = 0; row < this.grid.length; row++) {
+      if (this.complete(row)) {
+        idxToClear.push(row);
+      }
+    }
+    return idxToClear;
+  }
 
-
+  complete(rowIdx) {
+    return this.grid[rowIdx].every(col => col !==0);
+  }
   full() {
+    return this.grid[0][4] !== 0 || this.grid[0][5] !== 0;
+  }
 
-    return this.grid[0][4] !== 0 || this.grid[0][5];
+  removeRows(rowsToRemove) {
+    rowsToRemove.forEach(row => {
+      this.grid.splice(row, 1);
+      this.grid.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]);
+    });
   }
 
   draw(ctx) {

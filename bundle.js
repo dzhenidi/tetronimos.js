@@ -128,6 +128,8 @@
 	    this.landedTiles = [];
 	    this.board = new _board2.default();
 	    this.velocity = _constants.STARTING_VELOCITY;
+	    this.points = 0;
+	    this.level = 0;
 	  }
 	
 	  _createClass(Game, [{
@@ -148,6 +150,7 @@
 	      if (this.tiles.length === 0 || this.tiles[this.tiles.length - 1].landed) {
 	        this.addTile();
 	      } else {
+	        this.clearRows();
 	        if (this.gameOver()) {
 	          this.velocity = 0;
 	        } else {
@@ -171,8 +174,34 @@
 	      return this.board.full();
 	    }
 	  }, {
-	    key: "removeLine",
-	    value: function removeLine() {}
+	    key: "calculatePoints",
+	    value: function calculatePoints(rowsCleared) {
+	      var n = this.level;
+	
+	      switch (rowsCleared) {
+	        case 1:
+	          this.points += 40 * (n + 1);
+	          break;
+	        case 2:
+	          this.points += 100 * (n + 1);
+	          break;
+	        case 3:
+	          this.points += 300 * (n + 1);
+	          break;
+	        case 4:
+	          this.points += 1200 * (n + 1);
+	          break;
+	      }
+	    }
+	  }, {
+	    key: "clearRows",
+	    value: function clearRows() {
+	      var rowsToClear = this.board.rowsToClear();
+	      if (rowsToClear.length > 0) {
+	        this.calculatePoints(rowsToClear);
+	        this.board.removeRows(rowsToClear);
+	      }
+	    }
 	  }, {
 	    key: "draw",
 	    value: function draw(ctx) {
@@ -444,6 +473,9 @@
 	  6: 'blue', //J
 	  7: 'orange' //L
 	};
+	
+	// n = level
+	// n	40 * (n + 1)	100 * (n + 1)	300 * (n + 1)	1200 * (n + 1)
 
 /***/ },
 /* 4 */
@@ -834,10 +866,37 @@
 	      }
 	    }
 	  }, {
+	    key: 'rowsToClear',
+	    value: function rowsToClear() {
+	      var idxToClear = [];
+	      for (var row = 0; row < this.grid.length; row++) {
+	        if (this.complete(row)) {
+	          idxToClear.push(row);
+	        }
+	      }
+	      return idxToClear;
+	    }
+	  }, {
+	    key: 'complete',
+	    value: function complete(rowIdx) {
+	      return this.grid[rowIdx].every(function (col) {
+	        return col !== 0;
+	      });
+	    }
+	  }, {
 	    key: 'full',
 	    value: function full() {
+	      return this.grid[0][4] !== 0 || this.grid[0][5] !== 0;
+	    }
+	  }, {
+	    key: 'removeRows',
+	    value: function removeRows(rowsToRemove) {
+	      var _this = this;
 	
-	      return this.grid[0][4] !== 0 || this.grid[0][5];
+	      rowsToRemove.forEach(function (row) {
+	        _this.grid.splice(row, 1);
+	        _this.grid.unshift([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+	      });
 	    }
 	  }, {
 	    key: 'draw',

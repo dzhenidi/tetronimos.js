@@ -29,3 +29,6 @@ export const COLORS_NUM = {
   6: 'blue', //J
   7: 'orange' //L
 };
+
+// n = level
+// n	40 * (n + 1)	100 * (n + 1)	300 * (n + 1)	1200 * (n + 1)

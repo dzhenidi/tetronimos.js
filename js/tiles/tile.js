@@ -33,7 +33,7 @@ class Tile {
         } else {
           this.topLeft.col += 1;
         }
-      break;
+        break;
 
       case MOVES.LEFT:
         potentialTopLeft = {
@@ -45,7 +45,7 @@ class Tile {
         } else {
           this.topLeft.col -= 1;
         }
-      break;
+        break;
 
       case MOVES.DOWN:
         potentialTopLeft = Object.assign(
@@ -56,7 +56,7 @@ class Tile {
         } else {
           this.topLeft.row += 1;
         }
-      break;
+        break;
     }
   }
 

@@ -21,6 +21,8 @@ class Game {
     this.landedTiles = [];
     this.board = new Board();
     this.velocity = STARTING_VELOCITY;
+    this.points = 0;
+    this.level = 0;
   }
 
   addTile() {
@@ -37,12 +39,12 @@ class Game {
     if (this.tiles.length === 0 || this.tiles[this.tiles.length - 1].landed) {
       this.addTile();
     } else {
+      this.clearRows();
       if (this.gameOver()) {
         this.velocity = 0;
       } else {
         this.moveTile();
       }
-
     }
   }
 
@@ -59,8 +61,32 @@ class Game {
     return this.board.full();
   }
 
-  removeLine(){
+  calculatePoints(rowsCleared){
+    const n = this.level;
 
+    switch (rowsCleared) {
+      case 1:
+        this.points += 40 * (n + 1);
+        break;
+      case 2:
+        this.points += 100 * (n + 1);
+        break;
+      case 3:
+        this.points += 300 * (n + 1);
+        break;
+      case 4:
+        this.points += 1200 * (n + 1);
+        break;
+    }
+  }
+
+
+  clearRows(){
+    const rowsToClear = this.board.rowsToClear();
+    if (rowsToClear.length > 0) {
+      this.calculatePoints(rowsToClear);
+      this.board.removeRows(rowsToClear);
+    }
   }
 
   draw(ctx) {
