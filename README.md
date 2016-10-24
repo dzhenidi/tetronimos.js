@@ -52,22 +52,28 @@ potentialShape() {
   return newShape;
 }
 ```
+### Class Hierarchy
 
 board.js
   * holds tiles
   * checks valid tile positioning
   * clears rows
+
 game.js
   * carries out menu commands
   * randomizes and spawns the next tile
   * start/mute audio
+
 game-view.js
   * key handling
+
 tetronimos.js:
   * sets up canvas and context
   * initializes game and GameView
+
 tile.js
   * moves, drops, rotates tiles
+  * parent class to individual tetromino classes
 
 ## Todo
   * A score board with top 5 scorers;
