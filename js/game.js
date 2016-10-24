@@ -124,7 +124,7 @@ class Game {
     ctx.font = "italic "+26+"pt sans-serif ";
     ctx.fillText("Press RETURN", 20, 150);
     ctx.fillStyle = "black";
-    ctx.font = "italic "+26+"pt sans-serif ";
+    ctx.font = "italic "+26+"pt bitter ";
     ctx.fillText("to start/continue", 20, 200);
   }
 
