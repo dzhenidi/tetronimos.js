@@ -9,25 +9,25 @@ export const MOVES = {
 };
 
 export const COLORS = {
-  0: 'white', //empty
-  'line': 'cyan', //line
-  'O': 'yellow', //O
-  'T': 'purple', //T
-  'S': 'green', //S
-  'Z': 'red', //Z
-  'J': 'blue', //J
-  'L': 'orange' //L
+  0: '#cccccc', //empty
+  'line': '#5F4975', //line
+  'O': '#DE8989', //O
+  'T': '#89DEC1', //T
+  'S': '#FF9FC1', //S
+  'Z': '#BF4770', //Z
+  'J': '#FFDEC1', //J
+  'L': '#89DEC1' //L
 };
 
 export const COLORS_NUM = {
-  0: 'white', //empty
-  2: 'cyan', //line
-  1: 'yellow', //O
-  3: 'purple', //T
-  4: 'green', //S
-  5: 'red', //Z
-  6: 'blue', //J
-  7: 'orange' //L
+  0: '#cccccc', //empty
+  2: '#5F4975', //line
+  1: '#DE8989', //O
+  3: '#89DEC1', //T
+  4: '#FF9FC1', //S
+  5: '#BF4770', //Z
+  6: '#FFDEC1', //J
+  7: '#89DEC1' //L
 };
 
 // n = level

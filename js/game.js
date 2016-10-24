@@ -173,7 +173,7 @@ class Game {
 
 Game.DIM_X = 300;
 Game.DIM_Y = 600;
-Game.BG_COLOR = 'green';
+Game.BG_COLOR = '#cccccc';
 Game.NUM_PIECES = 7;
 
 

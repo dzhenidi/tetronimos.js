@@ -67,9 +67,13 @@ class Board {
         ctx.rect(col * 30, row * 30, SQUARE_SIDE, SQUARE_SIDE);
         ctx.fillStyle = COLORS_NUM[this.grid[row][col]];
         ctx.fill();
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = 'black';
-        ctx.stroke();
+
+        if (this.grid[row][col] !== 0) {
+
+          ctx.lineWidth = 4;
+          ctx.strokeStyle = 'black';
+          ctx.stroke();
+        }
 
       }
     }

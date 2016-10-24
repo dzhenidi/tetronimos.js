@@ -12,15 +12,6 @@ class Tile {
     this.landed = false;
   }
 
-
-  // potentialTopLeft() {
-  //   return {
-  //     row: Math.floor(this.topLeft.row) + 1,
-  //     col: Math.floor(this.topLeft.col)};
-  // }
-
-
-
   move(direction, velocity) {
     switch (direction) {
       case MOVES.RIGHT:
@@ -95,14 +86,13 @@ class Tile {
     for (let row = 0; row < this.shape.length; row++) {
       for (let col = 0; col < this.shape[row].length; col++) {
         if (this.shape[row][col] !== 0) {
-          //match landedBlocks[row][col]'s value to a shape with its color'
           let x = this.topLeft.col + col;
           let y = this.topLeft.row + row;
           ctx.beginPath();
           ctx.rect(x * 30, y * 30, SQUARE_SIDE, SQUARE_SIDE);
           ctx.fillStyle = this.color;
           ctx.fill();
-          ctx.lineWidth = 1;
+          ctx.lineWidth = 4;
           ctx.strokeStyle = 'black';
           ctx.stroke();
         }

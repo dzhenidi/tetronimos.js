@@ -297,7 +297,7 @@
 	
 	Game.DIM_X = 300;
 	Game.DIM_Y = 600;
-	Game.BG_COLOR = 'green';
+	Game.BG_COLOR = '#cccccc';
 	Game.NUM_PIECES = 7;
 	
 	exports.default = Game;
@@ -326,13 +326,6 @@
 	    this.topLeft = { row: 0, col: 4 };
 	    this.landed = false;
 	  }
-	
-	  // potentialTopLeft() {
-	  //   return {
-	  //     row: Math.floor(this.topLeft.row) + 1,
-	  //     col: Math.floor(this.topLeft.col)};
-	  // }
-	
 	
 	  _createClass(Tile, [{
 	    key: 'move',
@@ -410,14 +403,13 @@
 	      for (var row = 0; row < this.shape.length; row++) {
 	        for (var col = 0; col < this.shape[row].length; col++) {
 	          if (this.shape[row][col] !== 0) {
-	            //match landedBlocks[row][col]'s value to a shape with its color'
 	            var x = this.topLeft.col + col;
 	            var y = this.topLeft.row + row;
 	            ctx.beginPath();
 	            ctx.rect(x * 30, y * 30, _constants.SQUARE_SIDE, _constants.SQUARE_SIDE);
 	            ctx.fillStyle = this.color;
 	            ctx.fill();
-	            ctx.lineWidth = 1;
+	            ctx.lineWidth = 4;
 	            ctx.strokeStyle = 'black';
 	            ctx.stroke();
 	          }
@@ -486,25 +478,25 @@
 	};
 	
 	var COLORS = exports.COLORS = {
-	  0: 'white', //empty
-	  'line': 'cyan', //line
-	  'O': 'yellow', //O
-	  'T': 'purple', //T
-	  'S': 'green', //S
-	  'Z': 'red', //Z
-	  'J': 'blue', //J
-	  'L': 'orange' //L
+	  0: '#cccccc', //empty
+	  'line': '#5F4975', //line
+	  'O': '#DE8989', //O
+	  'T': '#89DEC1', //T
+	  'S': '#FF9FC1', //S
+	  'Z': '#BF4770', //Z
+	  'J': '#FFDEC1', //J
+	  'L': '#89DEC1' //L
 	};
 	
 	var COLORS_NUM = exports.COLORS_NUM = {
-	  0: 'white', //empty
-	  2: 'cyan', //line
-	  1: 'yellow', //O
-	  3: 'purple', //T
-	  4: 'green', //S
-	  5: 'red', //Z
-	  6: 'blue', //J
-	  7: 'orange' //L
+	  0: '#cccccc', //empty
+	  2: '#5F4975', //line
+	  1: '#DE8989', //O
+	  3: '#89DEC1', //T
+	  4: '#FF9FC1', //S
+	  5: '#BF4770', //Z
+	  6: '#FFDEC1', //J
+	  7: '#89DEC1' //L
 	};
 	
 	// n = level
@@ -941,9 +933,13 @@
 	          ctx.rect(col * 30, row * 30, _constants.SQUARE_SIDE, _constants.SQUARE_SIDE);
 	          ctx.fillStyle = _constants.COLORS_NUM[this.grid[row][col]];
 	          ctx.fill();
-	          ctx.lineWidth = 1;
-	          ctx.strokeStyle = 'black';
-	          ctx.stroke();
+	
+	          if (this.grid[row][col] !== 0) {
+	
+	            ctx.lineWidth = 4;
+	            ctx.strokeStyle = 'black';
+	            ctx.stroke();
+	          }
 	        }
 	      }
 	    }

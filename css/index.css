@@ -45,7 +45,8 @@ body {
   font-family: sans-serif;
   font-size: 16px;
   font-weight: 400;
-  background: black;
+  background: #4f4f54;
+  color: black;
 }
 
 h1 {
@@ -64,15 +65,15 @@ h2 {
 .content {
   /*position: relative;*/
   margin: 0 auto;
-  background: #fff;
-  width: 902px;
-  border: 1px solid #ccc;
+  background: #cccccc;
+  width: 910px;
+  /*border: 1px solid #ccc;*/
 }
 
 .main {
   float: left;
   width: 300px;
-  border: 1px solid black;
+  border: 5px solid #fff;
   position: relative;
 }
 
@@ -97,7 +98,7 @@ h2 {
 }
 
 .score {
-  border: 1px solid black;
+  border: 1px solid #fff;
   text-align: center;
   width: 150px;
   padding-bottom: 20px;
