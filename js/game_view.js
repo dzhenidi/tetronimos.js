@@ -6,14 +6,12 @@ class GameView {
   constructor(game, ctx){
     this.ctx = ctx;
     this.game = game;
-    // this.state = "paused";
   }
 
   start(){
     this.bindKeyHandlers();
     this.lastTime = 0;
     requestAnimationFrame(this.animate.bind(this));
-    // setTimeout(this.animate.bind(this), 1000/30);
   }
 
   bindKeyHandlers() {
@@ -27,7 +25,6 @@ class GameView {
     key('q', () => { this.game.tiles[this.game.tiles.length -1].rotate('countercw')});
   }
 
-  // pass argument time to animate to timestamp animations
   animate(time) {
     const timeDelta = time - this.lastTime;
 
@@ -36,13 +33,7 @@ class GameView {
     this.lastTime = time;
 
     requestAnimationFrame(this.animate.bind(this));
-    // setTimeout(this.animate.bind(this), 1000/30);
   }
-
-  // toggleState(){
-  //   this.state = this.state === "paused" ? "playing" : "paused";
-  // }
-
 
 
 }

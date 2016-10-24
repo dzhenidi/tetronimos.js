@@ -124,18 +124,14 @@ class Tile {
     for (let row = 0; row < this.shape.length; row++) {
       for (let col = 0; col < this.shape[row].length; col++) {
         if (this.shape[row][col] !== 0) {
-          let x = col;
-          let y = row;
-          let xD = (1 - x) || 0;
-          let yD = (1 - y) || 0;
-          let yNew = 1 + xD;
-          let xNew = 1 + (yD * -1);
-          // debugger
-          newShape[yNew][xNew] = this.shape[y][x];
+          let colD = (1 - col) || 0;
+          let rowD = (1 - row) || 0;
+          let rowNew = 1 + colD;
+          let colNew = 1 + (rowD * -1);
+          newShape[rowNew][colNew] = this.shape[row][col];
         }
       }
     }
-
     return newShape;
   }
 

@@ -20,34 +20,54 @@ Users can:
 
 ## Architecture and Technologies
 
-This project will be implemented with the following technologies:
+Tetronimos is implemented with the following technologies:
 
-* Vanilla JavaScript and jQuery for overall structure and game logic
+* Vanilla JavaScript for overall structure and game logic
+* ES6 language specification and babel to transpile code into ES5
 * HTML5 Canvas for DOM manipulation and rendering
 * Webpack to bundle and serve up the various scripts
 
-In addition to the webpack entry file, there will be three scripts involved in the project:
+The JS scripts follow on Object-Oriented Design, with separate classes for the board, the tiles, the game, and the game view. The 7 tetromino shapes inherit move, rotate, and render properties from the parent *tile* class.
+Tiles are represented by 3X3 two-dimensional arrays, and, with the exception of the *line* and *O*, rotate around their *[1][1]* index through a custom transpose function:
+
+```javascript
+potentialShape() {
+  const newShape = [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0]
+  ];
+
+  for (let row = 0; row < this.shape.length; row++) {
+    for (let col = 0; col < this.shape[row].length; col++) {
+      if (this.shape[row][col] !== 0) {
+        let colD = (1 - col) || 0;
+        let rowD = (1 - row) || 0;
+        let rowNew = 1 + colD;
+        let colNew = 1 + (rowD * -1);
+        newShape[rowNew][colNew] = this.shape[row][col];
+      }
+    }
+  }
+  return newShape;
+}
+```
 
 board.js
-  * class Board
-  * constructs and holds tiles
-  * valid tile positioning
+  * holds tiles
+  * checks valid tile positioning
+  * clears rows
 game.js
-  * render new game/ game over menu
-  * randomizing the next tile
+  * carries out menu commands
+  * randomizes and spawns the next tile
   * start/mute audio
-tetris-view.js
-  * class View
+game-view.js
   * key handling
-  * drawing and reseting the board
-  * moves tiles
-  * clearing rows
-tetris.js:
-  * class Tetris: constructor functions for the tiles
-  * color and type of each tile
-  * rotation possibilities for each tile
-  * rotate function
-  * move function
+tetronimos.js:
+  * sets up canvas and context
+  * initializes game and GameView
+tile.js
+  * moves, drops, rotates tiles
 
 ## Todo
   * A score board with top 5 scorers;
