@@ -1,5 +1,7 @@
 # Tetronimos
 
+[Play Tetronimos] (https://dzhenidi.github.io/tetronimos.js/)
+
 ## Description
   Tetronimos is a tile-matching browser game written in JavaScript and animated using the Canvas API.
   In the tradition of geometric puzzles, the tetronimo tile is a four-celled, one-sided polyomino (known as a *tetromino* in the CS world of tiling).
