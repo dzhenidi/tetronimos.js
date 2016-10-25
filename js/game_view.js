@@ -20,6 +20,7 @@ class GameView {
       let direction = GameView.MOVES[k];
       key(k, () => {
         this.game.tiles[this.game.tiles.length - 1].move(direction);
+        return false;
       });
     });
     key('q', () => { this.game.tiles[this.game.tiles.length -1].rotate('countercw')});
