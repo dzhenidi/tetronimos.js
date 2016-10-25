@@ -75,6 +75,7 @@ h2 {
   width: 300px;
   border: 5px solid #fff;
   position: relative;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
@@ -89,22 +90,29 @@ h2 {
 }
 
 .next-piece {
-  display: none;
+
 }
 .sidebar {
   width: 260px;
   float: left;
   padding: 20px;
+  line-height: 1.5;
 
 }
 
-.score {
+.score, .next-piece {
   border: 5px solid #fff;
   text-align: center;
-  width: 150px;
+  width: 200px;
   padding-bottom: 20px;
   font-size: 20px;
 }
+
+.next-piece {
+  height: auto;
+  margin-bottom: 20px;
+}
+
 
 header > img {
   width: 910px;

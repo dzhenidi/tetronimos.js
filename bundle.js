@@ -57,13 +57,14 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	document.addEventListener("DOMContentLoaded", function () {
-	  var canvasEl = document.getElementsByTagName("canvas")[0];
-	  canvasEl.width = _game2.default.DIM_X;
-	  canvasEl.height = _game2.default.DIM_Y;
-	
-	  var ctx = canvasEl.getContext("2d");
+	  var canvasBoard = document.getElementById("canvas-board");
+	  canvasBoard.width = _game2.default.DIM_X;
+	  canvasBoard.height = _game2.default.DIM_Y;
+	  var canvasPreview = document.getElementById("canvas-preview");
+	  var ctx = canvasBoard.getContext("2d");
+	  var ctxPreview = canvasPreview.getContext("2d");
 	  var game = new _game2.default();
-	  new _game_view2.default(game, ctx).start();
+	  new _game_view2.default(game, ctx, ctxPreview).start();
 	});
 
 /***/ },
@@ -125,7 +126,7 @@
 	    _classCallCheck(this, Game);
 	
 	    this.tiles = [];
-	    this.landedTiles = [];
+	    this.nextTile = null;
 	    this.board = new _board2.default();
 	    this.velocity = _constants.STARTING_VELOCITY;
 	    this.points = 0;
@@ -136,15 +137,11 @@
 	  _createClass(Game, [{
 	    key: "addTile",
 	    value: function addTile() {
-	      var newTile = this.randomTile();
+	      var newTile = this.nextTile || this.randomTile();
+	      this.nextTile = this.randomTile();
 	      this.tiles.push(newTile);
 	      return newTile;
 	    }
-	
-	    // landedTiles() {
-	    //   this.landedTiles = this.board.grid;
-	    // }
-	
 	  }, {
 	    key: "step",
 	    value: function step() {
@@ -198,7 +195,6 @@
 	      var currentTile = this.tiles[this.tiles.length - 1];
 	      currentTile.drop(this.velocity);
 	      if (currentTile.landed) {
-	        this.landedTiles.push(currentTile);
 	        this.addTile();
 	      }
 	    }
@@ -241,17 +237,20 @@
 	    value: function displayMenu(ctx) {
 	      ctx.fillStyle = "black";
 	      ctx.font = "italic " + 26 + "pt sans-serif ";
-	      ctx.fillText("Press RETURN", 20, 150);
-	      ctx.fillStyle = "black";
-	      ctx.font = "italic " + 26 + "pt bitter ";
-	      ctx.fillText("to start/continue", 20, 200);
+	      ctx.fillText("start/resume game", 5, 150);
+	      // ctx.fillStyle = "black";
+	      // ctx.font = "italic "+26+"pt bitter ";
+	      // ctx.fillText("to start/continue", 20, 200);
 	    }
 	  }, {
 	    key: "draw",
-	    value: function draw(ctx) {
+	    value: function draw(ctx, ctxPreview) {
 	      ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
 	      ctx.fillStyle = Game.BG_COLOR;
 	      ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
+	      ctxPreview.clearRect(0, 0, 140, 140);
+	      ctxPreview.fillStyle = Game.BG_COLOR;
+	      ctxPreview.fillRect(0, 0, 140, 140);
 	
 	      if (this.state === "paused") {
 	        this.displayMenu(ctx);
@@ -259,6 +258,9 @@
 	        this.board.draw(ctx);
 	        if (!this.tiles[this.tiles.length - 1].landed) {
 	          this.tiles[this.tiles.length - 1].draw(ctx);
+	        }
+	        if (this.nextTile) {
+	          this.nextTile.drawPreview(ctxPreview);
 	        }
 	      }
 	    }
@@ -412,6 +414,23 @@
 	            ctx.lineWidth = 4;
 	            ctx.strokeStyle = 'black';
 	            ctx.stroke();
+	          }
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'drawPreview',
+	    value: function drawPreview(ctxPreview) {
+	      for (var row = 0; row < this.shape.length; row++) {
+	        for (var col = 0; col < this.shape[row].length; col++) {
+	          if (this.shape[row][col] !== 0) {
+	            ctxPreview.beginPath();
+	            ctxPreview.rect(col * 30 + 10, row * 30 + 10, _constants.SQUARE_SIDE, _constants.SQUARE_SIDE);
+	            ctxPreview.fillStyle = this.color;
+	            ctxPreview.fill();
+	            ctxPreview.lineWidth = 4;
+	            ctxPreview.strokeStyle = 'black';
+	            ctxPreview.stroke();
 	          }
 	        }
 	      }
@@ -17995,10 +18014,11 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var GameView = function () {
-	  function GameView(game, ctx) {
+	  function GameView(game, ctx, ctxPreview) {
 	    _classCallCheck(this, GameView);
 	
 	    this.ctx = ctx;
+	    this.ctxPreview = ctxPreview;
 	    this.game = game;
 	  }
 	
@@ -18036,8 +18056,8 @@
 	    value: function animate(time) {
 	      var timeDelta = time - this.lastTime;
 	
-	      this.game.step(timeDelta, this.ctx);
-	      this.game.draw(this.ctx);
+	      this.game.step(timeDelta);
+	      this.game.draw(this.ctx, this.ctxPreview);
 	      this.lastTime = time;
 	
 	      requestAnimationFrame(this.animate.bind(this));

@@ -18,7 +18,7 @@ import {
 class Game {
   constructor() {
     this.tiles = [];
-    this.landedTiles = [];
+    this.nextTile = null;
     this.board = new Board();
     this.velocity = STARTING_VELOCITY;
     this.points = 0;
@@ -27,14 +27,11 @@ class Game {
   }
 
   addTile() {
-    let newTile = this.randomTile();
+    let newTile = this.nextTile || this.randomTile();
+    this.nextTile = this.randomTile();
     this.tiles.push(newTile);
     return newTile;
   }
-
-  // landedTiles() {
-  //   this.landedTiles = this.board.grid;
-  // }
 
   step() {
     if (this.state === "paused") {
@@ -82,7 +79,6 @@ class Game {
     let currentTile = this.tiles[this.tiles.length - 1];
     currentTile.drop(this.velocity);
     if (currentTile.landed) {
-      this.landedTiles.push(currentTile);
       this.addTile();
     }
   }
@@ -122,16 +118,19 @@ class Game {
   displayMenu(ctx){
     ctx.fillStyle = "black";
     ctx.font = "italic "+26+"pt sans-serif ";
-    ctx.fillText("Press RETURN", 20, 150);
-    ctx.fillStyle = "black";
-    ctx.font = "italic "+26+"pt bitter ";
-    ctx.fillText("to start/continue", 20, 200);
+    ctx.fillText("start/resume game", 5, 150);
+    // ctx.fillStyle = "black";
+    // ctx.font = "italic "+26+"pt bitter ";
+    // ctx.fillText("to start/continue", 20, 200);
   }
 
-  draw(ctx) {
+  draw(ctx, ctxPreview) {
     ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
     ctx.fillStyle = Game.BG_COLOR;
     ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
+    ctxPreview.clearRect(0, 0, 140, 140);
+    ctxPreview.fillStyle = Game.BG_COLOR;
+    ctxPreview.fillRect(0, 0, 140, 140);
 
     if (this.state === "paused") {
       this.displayMenu(ctx);
@@ -139,6 +138,9 @@ class Game {
       this.board.draw(ctx);
       if (!this.tiles[this.tiles.length - 1].landed) {
         this.tiles[this.tiles.length - 1].draw(ctx);
+      }
+      if (this.nextTile) {
+        this.nextTile.drawPreview(ctxPreview);
       }
     }
 

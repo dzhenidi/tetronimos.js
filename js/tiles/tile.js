@@ -100,6 +100,22 @@ class Tile {
     }
   }
 
+  drawPreview(ctxPreview) {
+    for (let row = 0; row < this.shape.length; row++) {
+      for (let col = 0; col < this.shape[row].length; col++) {
+        if (this.shape[row][col] !== 0) {
+          ctxPreview.beginPath();
+          ctxPreview.rect((col * 30) + 10, (row * 30) + 10, SQUARE_SIDE, SQUARE_SIDE);
+          ctxPreview.fillStyle = this.color;
+          ctxPreview.fill();
+          ctxPreview.lineWidth = 4;
+          ctxPreview.strokeStyle = 'black';
+          ctxPreview.stroke();
+        }
+      }
+    }
+  }
+
   rotate(direction) {
     switch (direction) {
       case 'countercw':

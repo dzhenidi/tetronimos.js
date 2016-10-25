@@ -3,8 +3,9 @@ import Tile from "./tiles/tile";
 
 
 class GameView {
-  constructor(game, ctx){
+  constructor(game, ctx, ctxPreview){
     this.ctx = ctx;
+    this.ctxPreview = ctxPreview;
     this.game = game;
   }
 
@@ -30,8 +31,8 @@ class GameView {
   animate(time) {
     const timeDelta = time - this.lastTime;
 
-    this.game.step(timeDelta, this.ctx);
-    this.game.draw(this.ctx);
+    this.game.step(timeDelta);
+    this.game.draw(this.ctx, this.ctxPreview);
     this.lastTime = time;
 
     requestAnimationFrame(this.animate.bind(this));
