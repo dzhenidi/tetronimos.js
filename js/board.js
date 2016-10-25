@@ -69,9 +69,9 @@ class Board {
         ctx.fill();
 
         if (this.grid[row][col] !== 0) {
-
-          ctx.lineWidth = 4;
+          
           ctx.strokeStyle = 'black';
+          ctx.lineWidth = 4;
           ctx.stroke();
         }
 

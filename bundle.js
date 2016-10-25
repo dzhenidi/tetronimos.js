@@ -243,7 +243,7 @@
 	      ctx.font = "italic " + 26 + "pt sans-serif ";
 	      ctx.fillText("Press RETURN", 20, 150);
 	      ctx.fillStyle = "black";
-	      ctx.font = "italic " + 26 + "pt sans-serif ";
+	      ctx.font = "italic " + 26 + "pt bitter ";
 	      ctx.fillText("to start/continue", 20, 200);
 	    }
 	  }, {
@@ -437,18 +437,14 @@
 	      for (var row = 0; row < this.shape.length; row++) {
 	        for (var col = 0; col < this.shape[row].length; col++) {
 	          if (this.shape[row][col] !== 0) {
-	            var x = col;
-	            var y = row;
-	            var xD = 1 - x || 0;
-	            var yD = 1 - y || 0;
-	            var yNew = 1 + xD;
-	            var xNew = 1 + yD * -1;
-	            // debugger
-	            newShape[yNew][xNew] = this.shape[y][x];
+	            var colD = 1 - col || 0;
+	            var rowD = 1 - row || 0;
+	            var rowNew = 1 + colD;
+	            var colNew = 1 + rowD * -1;
+	            newShape[rowNew][colNew] = this.shape[row][col];
 	          }
 	        }
 	      }
-	
 	      return newShape;
 	    }
 	  }]);
@@ -936,8 +932,8 @@
 	
 	          if (this.grid[row][col] !== 0) {
 	
-	            ctx.lineWidth = 4;
 	            ctx.strokeStyle = 'black';
+	            ctx.lineWidth = 4;
 	            ctx.stroke();
 	          }
 	        }
@@ -18004,7 +18000,6 @@
 	
 	    this.ctx = ctx;
 	    this.game = game;
-	    // this.state = "paused";
 	  }
 	
 	  _createClass(GameView, [{
@@ -18013,7 +18008,6 @@
 	      this.bindKeyHandlers();
 	      this.lastTime = 0;
 	      requestAnimationFrame(this.animate.bind(this));
-	      // setTimeout(this.animate.bind(this), 1000/30);
 	    }
 	  }, {
 	    key: 'bindKeyHandlers',
@@ -18027,15 +18021,16 @@
 	        var direction = GameView.MOVES[k];
 	        key(k, function () {
 	          _this.game.tiles[_this.game.tiles.length - 1].move(direction);
+	          return false;
 	        });
 	      });
 	      key('q', function () {
 	        _this.game.tiles[_this.game.tiles.length - 1].rotate('countercw');
 	      });
+	      key('up', function () {
+	        return false;
+	      });
 	    }
-	
-	    // pass argument time to animate to timestamp animations
-	
 	  }, {
 	    key: 'animate',
 	    value: function animate(time) {
@@ -18046,14 +18041,7 @@
 	      this.lastTime = time;
 	
 	      requestAnimationFrame(this.animate.bind(this));
-	      // setTimeout(this.animate.bind(this), 1000/30);
 	    }
-	
-	    // toggleState(){
-	    //   this.state = this.state === "paused" ? "playing" : "paused";
-	    // }
-	
-	
 	  }]);
 	
 	  return GameView;

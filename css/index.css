@@ -114,6 +114,7 @@ header > img {
 }
 .footer-container {
   width: 910px;
+  margin: 0 auto;
 }
 .footer-container .info  {
   float: left;

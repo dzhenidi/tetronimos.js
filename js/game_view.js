@@ -24,6 +24,7 @@ class GameView {
       });
     });
     key('q', () => { this.game.tiles[this.game.tiles.length -1].rotate('countercw')});
+    key('up', () => { return false });
   }
 
   animate(time) {
@@ -43,6 +44,6 @@ GameView.MOVES = {
   "a, left": "left",
   "s, down, space": "down",
   "d, right": "right"
-}
+};
 
 export default GameView;
