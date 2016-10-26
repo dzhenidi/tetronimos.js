@@ -14,20 +14,27 @@
 
 .modal-content {
     background: #89DEC1;
-    margin: 20% auto;
+    margin: 30% auto;
     padding: 20px;
-    border: 1px solid #fff;
-    width: 30%;
+    border: 1px solid #cccccc;
+    width: 40%;
     border-radius: 10px;
+}
+
+.modal-list {
+    padding: 20px;
+}
+.modal-list li {
+  line-height: 1.5;
 }
 
 /* The Close Button */
 .close-modal {
     color: #4f4f54;
-    /*float: right;*/
+    padding: 5px;
     font-size: 28px;
     font-weight: bold;
-    margin: 0 auto;
+    margin: 0 33%;
 }
 
 .close-modal:hover,

@@ -14,12 +14,15 @@
     <div class="modal">
       <div class="modal-content">
         <h2>Welcome to Tetronimos: a tile-matching game!</h2>
-        <h3>Your goal is to build as many rows as possible.</h3>
-        <h3>Move tiles left, right, and down with a d s or
-          &nbsp;<i class="fa fa-long-arrow-left"></i>
-        &nbsp;<i class="fa fa-long-arrow-right"></i>
-      &nbsp; <i class="fa fa-long-arrow-down"></i></h3>
-        <h3>Press RETURN to start or pause the game</h3>
+        <ul class="modal-list">
+          <li>Your goal is to build as many rows as possible.</li>
+          <li>Move tiles with <b>a</b> <b>d</b> <b>s</b> or
+            &nbsp;<i class="fa fa-long-arrow-left"></i>
+            &nbsp;<i class="fa fa-long-arrow-right"></i>
+            &nbsp; <i class="fa fa-long-arrow-down"></i></li>
+            <li>Rotate with <b>q</b></li>
+            <li>Press RETURN to start or pause the game</li>
+        </ul>
         <span class="close-modal">Let's play</span>
       </div>
     </div>
@@ -27,14 +30,64 @@
       <section class="sidebar left">
         <p class="control-keys">
           <h3>Control Keys</h3>
-          <ul>
+          <!-- <ul>
             <li>start: RETURN </li>
             <li>pause: RETURN</li>
             <li>move left: <b>a</b> or &nbsp; <i class="fa fa-long-arrow-left"></i></li>
             <li>move right: <b>d</b>  or &nbsp; <i class="fa fa-long-arrow-right"></i></li>
             <li>move down:  <b>s</b>  or &nbsp; <i class="fa fa-long-arrow-down"></i></li>
             <li>rotate:  <b>q</b></li>
-          </ul>
+          </ul> -->
+          <table class="control-keys">
+            <tr>
+              <th>
+                start
+              </th>
+              <td>
+                RETURN
+              </td>
+            </tr>
+            <tr>
+              <th>
+                pause
+              </th>
+              <td>
+                RETURN
+              </td>
+            </tr>
+            <tr>
+              <th>
+                left
+              </th>
+              <td>
+                <b>a </b>&nbsp; or &nbsp; <i class="fa fa-long-arrow-left"></i>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                right
+              </th>
+              <td>
+                <b>d </b>&nbsp;  or &nbsp; <i class="fa fa-long-arrow-right"></i>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                down
+              </th>
+              <td>
+                <b>s </b>&nbsp;  or &nbsp; <i class="fa fa-long-arrow-down"></i>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                rotate
+              </th>
+              <td>
+                <b>q</b>
+              </td>
+            </tr>
+          </table>
         </p>
 
       </section>

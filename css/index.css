@@ -115,7 +115,13 @@ h2 {
   margin-bottom: 20px;
 }
 
+.control-keys td {
+  padding-left: 20px;
+}
 
+.control-keys th {
+  text-align: left;
+}
 header > img {
   width: 910px;
   height: auto;
