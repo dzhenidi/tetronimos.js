@@ -69,7 +69,6 @@
 	
 	var modal = document.getElementsByClassName('modal')[0];
 	var closeButton = document.getElementsByClassName('close-modal')[0];
-	
 	function closeModal() {
 	  modal.style.display = 'none';
 	}
@@ -77,7 +76,6 @@
 	closeButton.onclick = closeModal;
 	
 	document.onclick = function (event) {
-	  debugger;
 	  if (event.target === modal) {
 	    modal.style.display = 'none';
 	  }
@@ -253,7 +251,7 @@
 	    value: function displayMenu(ctx) {
 	      ctx.fillStyle = "black";
 	      ctx.font = "italic " + 26 + "pt sans-serif ";
-	      ctx.fillText("start/resume game", 5, 150);
+	      // ctx.fillText("start/resume game", 5, 150);
 	      // ctx.fillStyle = "black";
 	      // ctx.font = "italic "+26+"pt bitter ";
 	      // ctx.fillText("to start/continue", 20, 200);

@@ -118,7 +118,7 @@ class Game {
   displayMenu(ctx){
     ctx.fillStyle = "black";
     ctx.font = "italic "+26+"pt sans-serif ";
-    ctx.fillText("start/resume game", 5, 150);
+    // ctx.fillText("start/resume game", 5, 150);
     // ctx.fillStyle = "black";
     // ctx.font = "italic "+26+"pt bitter ";
     // ctx.fillText("to start/continue", 20, 200);

@@ -14,9 +14,8 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 
-let modal = document.getElementsByClassName('modal')[0];
-let closeButton = document.getElementsByClassName('close-modal')[0];
-
+const modal = document.getElementsByClassName('modal')[0];
+const closeButton = document.getElementsByClassName('close-modal')[0];
 function closeModal() {
   modal.style.display = 'none';
 }
@@ -24,7 +23,6 @@ function closeModal() {
 closeButton.onclick = closeModal;
 
 document.onclick = function(event) {
-  debugger
   if (event.target === modal) {
     modal.style.display = 'none';
   }
