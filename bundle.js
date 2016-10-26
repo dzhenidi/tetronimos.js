@@ -66,6 +66,22 @@
 	  var game = new _game2.default();
 	  new _game_view2.default(game, ctx, ctxPreview).start();
 	});
+	
+	var modal = document.getElementsByClassName('modal')[0];
+	var closeButton = document.getElementsByClassName('close-modal')[0];
+	
+	function closeModal() {
+	  modal.style.display = 'none';
+	}
+	
+	closeButton.onclick = closeModal;
+	
+	document.onclick = function (event) {
+	  debugger;
+	  if (event.target === modal) {
+	    modal.style.display = 'none';
+	  }
+	};
 
 /***/ },
 /* 1 */
