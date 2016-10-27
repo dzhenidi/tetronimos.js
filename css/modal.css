@@ -14,11 +14,13 @@
 
 .modal-content {
     background: #89DEC1;
-    margin: 30% auto;
+    margin: 10% auto;
     padding: 20px;
     border: 1px solid #cccccc;
-    width: 40%;
+    width: 400px;
     border-radius: 10px;
+    border-bottom-width: 3px;
+    text-align: center;
 }
 
 .modal-list {
@@ -26,6 +28,13 @@
 }
 .modal-list li {
   line-height: 1.5;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.modal-list li:nth-child(2n+1) {
+
+  border-bottom: 1px solid #cccccc;
 }
 
 /* The Close Button */
@@ -34,7 +43,7 @@
     padding: 5px;
     font-size: 28px;
     font-weight: bold;
-    margin: 0 33%;
+    margin: 0 auto;
 }
 
 .close-modal:hover,
