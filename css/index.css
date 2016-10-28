@@ -81,14 +81,17 @@ h2 {
 .modal {
   background: pink;
 }
-#game-over {
+#game-over, #game-pause {
   display: none;
   width: 100%;
   position: absolute;
-  top: 250px;
-  background: #fff;
-  padding: 20px 0;
+  top: 0;
+  background: #cccccc;
+  text-align: center
+}
 
+#game-over {
+  z-index: 1;
 }
 
 .next-piece {

@@ -6,7 +6,7 @@ import TileS from "./tiles/s";
 import TileT from "./tiles/t";
 import TileZ from "./tiles/z";
 import TileL from "./tiles/l";
-
+import { showModal } from "./modal";
 
 import Board from "./board";
 import {
@@ -55,8 +55,10 @@ class Game {
   toggleState(){
     if (this.state === "paused") {
       this.state = "playing";
-      let el = document.getElementById("game-over");
-      el.style.display = '';
+      let elOver = document.getElementById("game-over");
+      elOver.style.display = '';
+      let elPause = document.getElementById("game-pause");
+      elPause.style.display = '';
     } else {
       this.state = "paused";
     }
@@ -72,9 +74,20 @@ class Game {
   }
 
   displayGameOver() {
-    let el = document.getElementById("game-over");
-    el.style.display = 'block';
+    let elOver = document.getElementById("game-over");
+    elOver.style.display = 'block';
+    let elScore = document.getElementById("final-score");
+    elScore.textContent = "Your score is "+ this.points;
   }
+
+  displayMenu() {
+    let pauseEl = document.getElementById('game-pause');
+    pauseEl.style.display = 'block';
+    // return () => {
+    //   pauseEl.style.display = 'block';
+    // };
+  }
+
   moveTile() {
     let currentTile = this.tiles[this.tiles.length - 1];
     currentTile.drop(this.velocity);
@@ -115,14 +128,6 @@ class Game {
     }
   }
 
-  displayMenu(ctx){
-    ctx.fillStyle = "black";
-    ctx.font = "italic "+26+"pt sans-serif ";
-    // ctx.fillText("start/resume game", 5, 150);
-    // ctx.fillStyle = "black";
-    // ctx.font = "italic "+26+"pt bitter ";
-    // ctx.fillText("to start/continue", 20, 200);
-  }
 
   draw(ctx, ctxPreview) {
     ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);

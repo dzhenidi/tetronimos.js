@@ -1,14 +1,14 @@
-let modal = document.getElementsByClassName('modal')[0];
-let closeButton = document.getElementsByClassName('close-modal')[0];
 
-function closeModal() {
-  modal.style.display = 'none';
-}
+const modal = document.getElementsByClassName('modal')[0];
+const closeButton = document.getElementsByClassName('close-modal')[0];
 
-closeButton.onclick = closeModal;
+export const showModal = () => {
+  modal.style.display = 'block';
+  document.onclick = function(event) {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  };
+  closeButton.onclick = () => modal.style.display = 'none';
 
-window.onclick = function(event) {
-  if (event.target === modal) {
-    closeModal();
-  }
 };

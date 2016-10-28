@@ -1,6 +1,6 @@
 import Game from "./game";
 import GameView from "./game_view";
-
+import { showModal } from "./modal";
 
 document.addEventListener("DOMContentLoaded", function(){
   const canvasBoard = document.getElementById("canvas-board");
@@ -10,20 +10,6 @@ document.addEventListener("DOMContentLoaded", function(){
   const ctx = canvasBoard.getContext("2d");
   const ctxPreview = canvasPreview.getContext("2d");
   const game = new Game();
+  showModal();
   new GameView(game, ctx, ctxPreview).start();
 });
-
-
-const modal = document.getElementsByClassName('modal')[0];
-const closeButton = document.getElementsByClassName('close-modal')[0];
-function closeModal() {
-  modal.style.display = 'none';
-}
-
-closeButton.onclick = closeModal;
-
-document.onclick = function(event) {
-  if (event.target === modal) {
-    modal.style.display = 'none';
-  }
-};

@@ -54,6 +54,8 @@
 	
 	var _game_view2 = _interopRequireDefault(_game_view);
 	
+	var _modal = __webpack_require__(15);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	document.addEventListener("DOMContentLoaded", function () {
@@ -64,22 +66,9 @@
 	  var ctx = canvasBoard.getContext("2d");
 	  var ctxPreview = canvasPreview.getContext("2d");
 	  var game = new _game2.default();
+	  (0, _modal.showModal)();
 	  new _game_view2.default(game, ctx, ctxPreview).start();
 	});
-	
-	var modal = document.getElementsByClassName('modal')[0];
-	var closeButton = document.getElementsByClassName('close-modal')[0];
-	function closeModal() {
-	  modal.style.display = 'none';
-	}
-	
-	closeButton.onclick = closeModal;
-	
-	document.onclick = function (event) {
-	  if (event.target === modal) {
-	    modal.style.display = 'none';
-	  }
-	};
 
 /***/ },
 /* 1 */
@@ -124,6 +113,8 @@
 	var _l = __webpack_require__(10);
 	
 	var _l2 = _interopRequireDefault(_l);
+	
+	var _modal = __webpack_require__(15);
 	
 	var _board = __webpack_require__(11);
 	
@@ -181,8 +172,10 @@
 	    value: function toggleState() {
 	      if (this.state === "paused") {
 	        this.state = "playing";
-	        var el = document.getElementById("game-over");
-	        el.style.display = '';
+	        var elOver = document.getElementById("game-over");
+	        elOver.style.display = '';
+	        var elPause = document.getElementById("game-pause");
+	        elPause.style.display = '';
 	      } else {
 	        this.state = "paused";
 	      }
@@ -200,8 +193,19 @@
 	  }, {
 	    key: "displayGameOver",
 	    value: function displayGameOver() {
-	      var el = document.getElementById("game-over");
-	      el.style.display = 'block';
+	      var elOver = document.getElementById("game-over");
+	      elOver.style.display = 'block';
+	      var elScore = document.getElementById("final-score");
+	      elScore.textContent = "Your score is " + this.points;
+	    }
+	  }, {
+	    key: "displayMenu",
+	    value: function displayMenu() {
+	      var pauseEl = document.getElementById('game-pause');
+	      pauseEl.style.display = 'block';
+	      // return () => {
+	      //   pauseEl.style.display = 'block';
+	      // };
 	    }
 	  }, {
 	    key: "moveTile",
@@ -245,16 +249,6 @@
 	        this.calculatePoints(rowsToClear.length);
 	        this.updateScore();
 	      }
-	    }
-	  }, {
-	    key: "displayMenu",
-	    value: function displayMenu(ctx) {
-	      ctx.fillStyle = "black";
-	      ctx.font = "italic " + 26 + "pt sans-serif ";
-	      // ctx.fillText("start/resume game", 5, 150);
-	      // ctx.fillStyle = "black";
-	      // ctx.font = "italic "+26+"pt bitter ";
-	      // ctx.fillText("to start/continue", 20, 200);
 	    }
 	  }, {
 	    key: "draw",
@@ -18088,6 +18082,31 @@
 	};
 	
 	exports.default = GameView;
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var modal = document.getElementsByClassName('modal')[0];
+	var closeButton = document.getElementsByClassName('close-modal')[0];
+	
+	var showModal = exports.showModal = function showModal() {
+	  modal.style.display = 'block';
+	  document.onclick = function (event) {
+	    if (event.target === modal) {
+	      modal.style.display = 'none';
+	    }
+	  };
+	  closeButton.onclick = function () {
+	    return modal.style.display = 'none';
+	  };
+	};
 
 /***/ }
 /******/ ]);
