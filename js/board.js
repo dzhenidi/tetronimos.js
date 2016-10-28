@@ -63,16 +63,24 @@ class Board {
   draw(ctx) {
     for (let row = 0; row < this.grid.length; row++) {
       for (let col = 0; col < this.grid[row].length; col++) {
-        ctx.beginPath();
-        ctx.rect(col * 30, row * 30, SQUARE_SIDE, SQUARE_SIDE);
-        ctx.fillStyle = COLORS_NUM[this.grid[row][col]];
-        ctx.fill();
+        // ctx.beginPath();
+        // ctx.rect(col * 30, row * 30, SQUARE_SIDE, SQUARE_SIDE);
+        // ctx.fillStyle = COLORS_NUM[this.grid[row][col]];
+        // ctx.fill();
 
         if (this.grid[row][col] !== 0) {
-          
+          ctx.beginPath();
+          ctx.rect(col * 30, row * 30, SQUARE_SIDE, SQUARE_SIDE);
+          ctx.fillStyle = COLORS_NUM[this.grid[row][col]];
+          ctx.fill();
           ctx.strokeStyle = 'black';
           ctx.lineWidth = 4;
           ctx.stroke();
+        } else {
+          ctx.beginPath();
+          ctx.rect(col * 30 +4, row * 30 +4, SQUARE_SIDE, SQUARE_SIDE);
+          ctx.fillStyle = COLORS_NUM[this.grid[row][col]];
+          ctx.fill();
         }
 
       }

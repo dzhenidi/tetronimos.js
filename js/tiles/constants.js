@@ -12,7 +12,7 @@ export const COLORS = {
   0: '#cccccc', //empty
   'line': '#5F4975', //line
   'O': '#DE8989', //O
-  'T': '#89DEC1', //T
+  'T': '#388CC1', //T
   'S': '#FF9FC1', //S
   'Z': '#BF4770', //Z
   'J': '#FFDEC1', //J
@@ -23,7 +23,7 @@ export const COLORS_NUM = {
   0: '#cccccc', //empty
   2: '#5F4975', //line
   1: '#DE8989', //O
-  3: '#89DEC1', //T
+  3: '#388CC1', //T
   4: '#FF9FC1', //S
   5: '#BF4770', //Z
   6: '#FFDEC1', //J
